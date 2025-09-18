@@ -8,17 +8,49 @@
 - Build and run a basic physics simulation
 - Configure your development environment (VS Code/Cursor) for C++ development
 
-The code itself is not meant to be taken as an exlempar
+The code itself is not meant to be taken as an exemplar
 
 ## What This Project Does
 
-This is a simple falling blocks physics simulation that demonstrates:
-- SDL2 for window creation and rendering
-- Box2D 3.x for 2D physics simulation
-- tinyxml2 for configuration file loading
-- vcpkg for dependency management
+This is a simple falling blocks physics simulation. The following libraries are used:
 
-Blocks spawn randomly at the top of the screen with random colors, fall with realistic physics, and bounce off the ground.
+**Directly demonstrated in the code:**
+- SDL2: window creation and rendering
+- Box2D: 2D physics simulation
+- tinyxml2: XML configuration file loading
+
+**Included and linked for your convenience in CMake (not directly demonstrated):**
+- SDL2_ttf: font rendering
+- SDL2_image: image loading
+- SDL2_mixer: audio playback
+- yaml-cpp: YAML configuration file loading
+- nlohmann-json: JSON data handling
+
+Blocks spawn at configurable intervals with random colors, fall with realistic physics, and bounce off the ground. The spawn rate and box size can be configured in `assets/config.xml`.
+
+## Available Libraries
+
+This starter project includes a comprehensive set of libraries for game development:
+
+### **Graphics & Rendering**
+- **SDL2**: Core window management and 2D rendering
+- **SDL2 TTF**: Text rendering with custom fonts
+- **SDL2 Image**: Load PNG, JPG, BMP, GIF, TGA images
+
+### **Audio**
+- **SDL2 Mixer**: Sound effects and music playback
+
+### **Physics**
+- **Box2D**: Professional 2D physics simulation
+
+### **Data Formats**
+- **tinyxml2**: XML configuration files
+- **yaml-cpp**: YAML configuration files (human-readable)
+- **nlohmann-json**: JSON data exchange (web standard)
+
+### **Development**
+- **vcpkg**: Cross-platform package manager
+- **CMake**: Build system configuration
 
 ## Prerequisites for Windows
 
@@ -32,7 +64,7 @@ Before cloning this project, you need to install the following on your Windows m
 - VS Code: https://code.visualstudio.com/
 - Cursor: https://cursor.sh/
 - Install the **C/C++ Extension Pack** for IntelliSense support
-- Install the **CMake Tools** and **CMake** extensions for building and configuring CMake projects
+- Install the **CMake Tools** extension for building and configuring CMake projects
 
 ### 3. Everything Else (Auto-Installed)
 The setup script will automatically install:
@@ -109,7 +141,7 @@ Install these extensions for the best development experience:
 
 ### Ready to Use!
 The project includes pre-configured VS Code settings:
-- **IntelliSense** - Configured for SDL2, Box2D, and tinyxml2
+- **IntelliSense** - Configured for MinGW with SDL2, Box2D, and tinyxml2
 - **Build Tasks** - Press `Ctrl+Shift+P` → "Tasks: Run Task" → "build-mingw-debug"
 - **Debug Launch** - Press `F5` to build and run with GDB debugging
 
@@ -128,9 +160,10 @@ All configuration files are already included in the `.vscode/` directory.
 │   ├── Game.cpp           # Game class implementation
 │   └── main.cpp           # Entry point
 ├── .vscode/               # VS Code configuration
-│   ├── c_cpp_properties.json  # IntelliSense settings
-│   ├── tasks.json         # Build tasks
-│   └── launch.json        # Debug configuration
+│   ├── c_cpp_properties.json  # IntelliSense settings (MinGW)
+│   ├── tasks.json         # Build tasks (MinGW only)
+│   ├── launch.json        # Debug configuration (GDB)
+│   └── settings.json      # CMake settings
 ├── CMakeLists.txt         # CMake configuration
 ├── CMakePresets.json      # CMake presets
 ├── vcpkg.json            # Package dependencies
@@ -139,12 +172,9 @@ All configuration files are already included in the `.vscode/` directory.
 └── README.md             # This file
 ```
 
-## Dependencies
+## Package Management
 
-This project uses vcpkg to manage the following dependencies:
-- **SDL2**: Cross-platform multimedia library
-- **Box2D**: 2D physics engine (version 3.x)
-- **tinyxml2**: XML parsing library
+This project uses **vcpkg** to automatically download, compile, and link all dependencies. The `vcpkg.json` file specifies exactly which libraries are needed, and vcpkg handles the rest.
 
 ## Troubleshooting
 
@@ -162,7 +192,7 @@ This project uses vcpkg to manage the following dependencies:
      - MinGW-w64: https://www.mingw-w64.org/downloads/
    - Restart your terminal/VS Code after installation
 
-4. **Build errors**
+3. **Build errors**
    - Try cleaning: `cmake --build build/win-mingw-debug --target clean`
    - Reconfigure: `cmake --preset windows-mingw-debug`
 
@@ -179,7 +209,34 @@ If you encounter issues:
 Once you have this project building and running successfully, you're ready to:
 - Start your actual game development assignments
 - Use this as a reference for setting up SDL2 + Box2D projects
-- Modify the code to experiment with different physics behaviors
+- Experiment with different physics behaviors
+- Add images, sounds, and text to your games
+- Create configuration files in XML, YAML, or JSON formats
 - Add your own game features and mechanics
+
+## Example Usage
+
+With the included libraries, you can easily:
+
+```cpp
+// Load images
+SDL_Surface* image = IMG_Load("assets/sprite.png");
+
+// Render text
+TTF_Font* font = TTF_OpenFont("assets/font.ttf", 24);
+SDL_Surface* text = TTF_RenderText_Solid(font, "Hello World!", color);
+
+// Play sounds
+Mix_Chunk* sound = Mix_LoadWAV("assets/sound.wav");
+Mix_PlayChannel(-1, sound, 0);
+
+// Parse JSON
+nlohmann::json config = nlohmann::json::parse(file_content);
+float spawnRate = config["spawnRate"];
+
+// Parse YAML
+YAML::Node config = YAML::LoadFile("config.yaml");
+float gravity = config["gravity"].as<float>();
+```
 
 Remember: This starter project is just to verify your development environment works. Your actual assignments should follow proper C++ programming practices!

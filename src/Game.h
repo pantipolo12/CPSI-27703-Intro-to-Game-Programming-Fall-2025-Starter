@@ -34,7 +34,8 @@ private:
     std::string title_ = "Falling Blocks";
     std::mt19937 rng_;
     float spawnTimer_ = 0.0f;
-    const float spawnInterval_ = 0.5f; // Spawn every 0.5 seconds
+    float spawnInterval_ = 0.5f; // Spawn rate from config
+    float boxSize_ = 0.5f; // Box size from config
     
     // Rendering constants
     static constexpr int SCREEN_WIDTH = 800;

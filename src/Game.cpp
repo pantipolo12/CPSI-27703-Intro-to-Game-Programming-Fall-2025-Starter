@@ -62,7 +62,12 @@ bool Game::loadConfig(const std::string& path) {
     if (!root) return false;
     if (const char* t = root->Attribute("title")) title_ = t;
     root->QueryFloatAttribute("gravityY", &gravityY_);
-    std::cout << "Loaded config: title=\"" << title_ << "\" gravityY=" << gravityY_ << "\n";
+    float spawnRate;
+    root->QueryFloatAttribute("spawnRate", &spawnRate);
+    spawnInterval_ = 1.0f / spawnRate; // Convert spawns per second to seconds between spawns
+    root->QueryFloatAttribute("boxSize", &boxSize_);
+    std::cout << "Loaded config: title=\"" << title_ << "\" gravityY=" << gravityY_ 
+              << " spawnRate=" << spawnRate << " spawnInterval=" << spawnInterval_ << " boxSize=" << boxSize_ << "\n";
     return true;
 }
 
@@ -103,7 +108,7 @@ bool Game::init() {
     rng_.seed(std::chrono::steady_clock::now().time_since_epoch().count());
     
     // Create block texture once
-    int blockSize = static_cast<int>(PIXELS_PER_METER);
+    int blockSize = static_cast<int>(boxSize_ * PIXELS_PER_METER);
     blockTexture_ = SDL_CreateTexture(renderer_, SDL_PIXELFORMAT_RGBA8888, 
                                     SDL_TEXTUREACCESS_TARGET, blockSize, blockSize);
     if (!blockTexture_) {
@@ -176,7 +181,7 @@ void Game::render() {
             SDL_SetTextureColorMod(blockTexture_, block.color.r, block.color.g, block.color.b);
             
             // Draw the rotated texture with color modulation
-            int blockSize = static_cast<int>(PIXELS_PER_METER);
+            int blockSize = static_cast<int>(boxSize_ * PIXELS_PER_METER);
             SDL_Rect destRect = {centerX - blockSize/2, centerY - blockSize/2, blockSize, blockSize};
             SDL_RenderCopyEx(renderer_, blockTexture_, nullptr, &destRect, angle, nullptr, SDL_FLIP_NONE);
         }
@@ -210,7 +215,7 @@ void Game::spawnRandomBlock() {
     b2ShapeDef dynamicShapeDef = b2DefaultShapeDef();
     dynamicShapeDef.density = 1.0f;
     dynamicShapeDef.material.restitution = 0.3f; // Add some bounciness
-    b2Polygon dynamicBox = b2MakeBox(0.5f, 0.5f); // Smaller blocks
+    b2Polygon dynamicBox = b2MakeBox(boxSize_/2.0f, boxSize_/2.0f); // b2MakeBox uses half-width/half-height
     b2CreatePolygonShape(blockId, &dynamicShapeDef, &dynamicBox);
     
     // Store block with its color

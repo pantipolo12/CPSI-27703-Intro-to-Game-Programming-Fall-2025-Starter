@@ -2,53 +2,14 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "build-debug",
+            "label": "build-mingw-debug",
             "type": "shell",
             "command": "cmake",
-            "args": [
-                "--build",
-                "build/win-vs2022-debug",
-                "--config",
-                "Debug"
-            ],
+            "args": ["--build", "build/win-mingw-debug"],
             "group": {
                 "kind": "build",
                 "isDefault": true
             },
-            "presentation": {
-                "echo": true,
-                "reveal": "always",
-                "focus": false,
-                "panel": "shared"
-            },
-            "problemMatcher": "$msCompile"
-        },
-        {
-            "label": "configure-cmake",
-            "type": "shell",
-            "command": "cmake",
-            "args": [
-                "--preset=win-vs2022-debug"
-            ],
-            "group": "build",
-            "presentation": {
-                "echo": true,
-                "reveal": "always",
-                "focus": false,
-                "panel": "shared"
-            }
-        },
-        {
-            "label": "build-mingw-debug",
-            "type": "shell",
-            "command": "cmake",
-            "args": [
-                "--build",
-                "build/win-mingw-debug",
-                "--config",
-                "Debug"
-            ],
-            "group": "build",
             "presentation": {
                 "echo": true,
                 "reveal": "always",

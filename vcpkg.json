@@ -4,8 +4,13 @@
     "builtin-baseline": "4334d8b4c8916018600212ab4dd4bbdc343065d1",
     "dependencies": [
       "sdl2",
+      "sdl2-ttf",
+      "sdl2-image",
+      "sdl2-mixer",
       "box2d",
-      "tinyxml2"
+      "tinyxml2",
+      "yaml-cpp",
+      "nlohmann-json"
     ]
   }
   
