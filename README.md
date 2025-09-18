@@ -1,5 +1,13 @@
 # SDL2 + Box2D + tinyxml2 Starter Project
 
+## 📺 Setup Video Tutorial
+
+**Watch the setup tutorial:** [https://youtu.be/smN-sd1F7pU](https://youtu.be/smN-sd1F7pU)
+
+## 📁 Repository
+
+**GitHub Repository:** [https://github.com/NicholasSeward/CPSI-27703-Intro-to-Game-Programming-Fall-2025-Starter/](https://github.com/NicholasSeward/CPSI-27703-Intro-to-Game-Programming-Fall-2025-Starter/)
+
 ## ⚠️ Important Notice
 
 **This code is NOT an example of good programming practices for this class.** This project serves as a minimal demonstration to verify that you can successfully:
@@ -77,7 +85,7 @@ The setup script will automatically install:
 ### Option 1: Automated Setup (Recommended)
 1. **Clone the Repository**
    ```bash
-   git clone <your-repo-url>
+   git clone https://github.com/NicholasSeward/CPSI-27703-Intro-to-Game-Programming-Fall-2025-Starter.git
    cd CPSI-27703-Intro-to-Game-Programming-Fall-2025-Starter
    ```
 
@@ -101,7 +109,7 @@ If you prefer to run the commands manually:
 
 1. **Clone the Repository**
    ```bash
-   git clone <your-repo-url>
+   git clone https://github.com/NicholasSeward/CPSI-27703-Intro-to-Game-Programming-Fall-2025-Starter.git
    cd CPSI-27703-Intro-to-Game-Programming-Fall-2025-Starter
    ```
 
