@@ -2,7 +2,7 @@
 
 ## 📺 Setup Video Tutorial
 
-a**Watch the setup tutorial:**
+**Watch the setup tutorial:**
 
 [![Setup Tutorial](https://img.youtube.com/vi/smN-sd1F7pU/0.jpg)](https://youtu.be/smN-sd1F7pU)
 
