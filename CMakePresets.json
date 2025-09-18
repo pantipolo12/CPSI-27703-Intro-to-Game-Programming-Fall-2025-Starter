@@ -1,0 +1,74 @@
+{
+    "version": 4,
+    "cmakeMinimumRequired": { "major": 3, "minor": 21, "patch": 0 },
+    "configurePresets": [
+      {
+        "name": "windows-mingw-debug",
+        "displayName": "Windows MinGW + Ninja (Debug)",
+        "generator": "Ninja",
+        "binaryDir": "${sourceDir}/build/win-mingw-debug",
+        "cacheVariables": {
+          "CMAKE_BUILD_TYPE": "Debug",
+          "CMAKE_C_COMPILER": "C:/ProgramData/mingw64/mingw64/bin/gcc.exe",
+          "CMAKE_CXX_COMPILER": "C:/ProgramData/mingw64/mingw64/bin/g++.exe",
+          "CMAKE_TOOLCHAIN_FILE": "${sourceDir}/external/vcpkg/scripts/buildsystems/vcpkg.cmake",
+          "VCPKG_TARGET_TRIPLET": "x64-mingw-dynamic",
+          "CMAKE_CXX_FLAGS_DEBUG": "-g -O0",
+          "CMAKE_C_FLAGS_DEBUG": "-g -O0"
+        }
+      },
+      {
+        "name": "windows-x64-debug",
+        "displayName": "Windows MSVC + Ninja (Debug)",
+        "generator": "Ninja",
+        "binaryDir": "${sourceDir}/build/win-debug",
+        "cacheVariables": {
+          "CMAKE_BUILD_TYPE": "Debug",
+          "CMAKE_TOOLCHAIN_FILE": "${sourceDir}/external/vcpkg/scripts/buildsystems/vcpkg.cmake",
+          "VCPKG_TARGET_TRIPLET": "x64-windows"
+        }
+      },
+      {
+        "name": "windows-vs2022-debug",
+        "displayName": "Windows MSVC + VS 2022 (Debug)",
+        "generator": "Visual Studio 17 2022",
+        "architecture": { "value": "x64", "strategy": "external" },
+        "binaryDir": "${sourceDir}/build/win-vs2022-debug",
+        "cacheVariables": {
+          "CMAKE_TOOLCHAIN_FILE": "${sourceDir}/external/vcpkg/scripts/buildsystems/vcpkg.cmake",
+          "VCPKG_TARGET_TRIPLET": "x64-windows"
+        }
+      },
+      {
+        "name": "linux-clang-debug",
+        "displayName": "Linux Clang + Ninja (Debug)",
+        "generator": "Ninja",
+        "binaryDir": "${sourceDir}/build/linux-debug",
+        "cacheVariables": {
+          "CMAKE_BUILD_TYPE": "Debug",
+          "CMAKE_TOOLCHAIN_FILE": "${sourceDir}/external/vcpkg/scripts/buildsystems/vcpkg.cmake",
+          "VCPKG_TARGET_TRIPLET": "x64-linux"
+        }
+      },
+      {
+        "name": "macos-clang-debug",
+        "displayName": "macOS Clang + Ninja (Debug)",
+        "generator": "Ninja",
+        "binaryDir": "${sourceDir}/build/macos-debug",
+        "cacheVariables": {
+          "CMAKE_BUILD_TYPE": "Debug",
+          "CMAKE_TOOLCHAIN_FILE": "${sourceDir}/external/vcpkg/scripts/buildsystems/vcpkg.cmake",
+          "VCPKG_TARGET_TRIPLET": "x64-osx"
+        }
+      }
+    ],
+    "buildPresets": [
+      { "name": "windows-mingw-debug", "configurePreset": "windows-mingw-debug" },
+      { "name": "windows-x64-debug", "configurePreset": "windows-x64-debug" },
+      { "name": "windows-vs2022-debug", "configurePreset": "windows-vs2022-debug" },
+      { "name": "linux-clang-debug", "configurePreset": "linux-clang-debug" },
+      { "name": "macos-clang-debug", "configurePreset": "macos-clang-debug" }
+    ],
+    "testPresets": []
+  }
+  
