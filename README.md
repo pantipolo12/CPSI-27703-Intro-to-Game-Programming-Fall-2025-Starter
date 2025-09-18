@@ -2,7 +2,11 @@
 
 ## 📺 Setup Video Tutorial
 
-**Watch the setup tutorial:** [https://youtu.be/smN-sd1F7pU](https://youtu.be/smN-sd1F7pU)
+a**Watch the setup tutorial:**
+
+[![Setup Tutorial](https://img.youtube.com/vi/smN-sd1F7pU/0.jpg)](https://youtu.be/smN-sd1F7pU)
+
+*Click the thumbnail above to watch the full tutorial on YouTube*
 
 ## 📁 Repository
 
