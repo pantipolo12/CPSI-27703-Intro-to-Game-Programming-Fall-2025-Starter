@@ -9,12 +9,14 @@
         "binaryDir": "${sourceDir}/build/win-mingw-debug",
         "cacheVariables": {
           "CMAKE_BUILD_TYPE": "Debug",
-          "CMAKE_C_COMPILER": "C:/ProgramData/mingw64/mingw64/bin/gcc.exe",
-          "CMAKE_CXX_COMPILER": "C:/ProgramData/mingw64/mingw64/bin/g++.exe",
+          "CMAKE_C_COMPILER": "C:/Dev-Cpp/TDM-GCC-64/bin/g++.exe",
+          "CMAKE_CXX_COMPILER": "C:/Dev-Cpp/TDM-GCC-64/bin/g++.exe",
           "CMAKE_TOOLCHAIN_FILE": "${sourceDir}/external/vcpkg/scripts/buildsystems/vcpkg.cmake",
           "VCPKG_TARGET_TRIPLET": "x64-mingw-dynamic",
+          "VCPKG_HOST_TRIPLET": "x64-mingw-dynamic",
           "CMAKE_CXX_FLAGS_DEBUG": "-g -O0",
-          "CMAKE_C_FLAGS_DEBUG": "-g -O0"
+          "CMAKE_C_FLAGS_DEBUG": "-g -O0",
+          "CMAKE_MAKE_PROGRAM": "ninja"
         }
       },
       {
