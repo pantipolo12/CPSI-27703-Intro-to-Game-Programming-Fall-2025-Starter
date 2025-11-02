@@ -1,96 +1,85 @@
-//#include "Game.h"
 #include <SDL.h>
-#include <iostream>
+#include <SDL_image.h>
 #include "Engine.h"
-
-using namespace std;
-
-const int SCREEN_WIDTH = 800;
-const int SCREEN_HEIGHT = 600;
-const float WORLD_SCALE = 100.0f;
-
-int groundY = SCREEN_HEIGHT - (int)(1.0f * WORLD_SCALE);  // World Y = 1
-
+#include "Input.h"
 
 int main(int argc, char* argv[]) {
-
-        SDL_Init(SDL_INIT_VIDEO);
-        SDL_Window* window = SDL_CreateWindow("GAME", 100, 100, 800, 600, SDL_WINDOW_SHOWN);
-        SDL_Renderer* renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
-    
-        // Load the level
-        Engine engine("assets/level.xml");
-    
-        bool running = true;
-        int mouseX = 0, mouseY = 0;
-    
-        while (running) {
-            SDL_Event event;
-            while (SDL_PollEvent(&event)) {
-                if (event.type == SDL_QUIT)
-                    running = false;
-                if (event.type == SDL_MOUSEMOTION) {
-                    mouseX = event.motion.x;
-                    mouseY = event.motion.y;
-                }
-            }
-    
-            // Clear screen
-            SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
-            SDL_RenderClear(renderer);
-    
-            // Update and draw objects
-            engine.update();
-            engine.draw(renderer);
-            SDL_SetRenderDrawColor(renderer, 255, 255, 0, 255);
-            SDL_RenderDrawLine(renderer, 0, groundY, SCREEN_WIDTH, groundY);
-
-    
-            // Present frame
-            SDL_RenderPresent(renderer);
-        }
-    
-        SDL_DestroyRenderer(renderer);
-        SDL_DestroyWindow(window);
-        SDL_Quit();
-        return 0;
+    // Initialize SDL
+    if (SDL_Init(SDL_INIT_VIDEO) != 0) {
+        SDL_Log("SDL_Init Error: %s", SDL_GetError());
+        return 1;
     }
 
+    if (IMG_Init(IMG_INIT_PNG) != IMG_INIT_PNG) {
+        SDL_Log("Failed to init SDL_image: %s", IMG_GetError());
+        return 1;
+    }
+    
 
-// Practice code
+    SDL_Window* window = SDL_CreateWindow("Component Game", 100, 100, 800, 600, SDL_WINDOW_SHOWN);
+    if (!window) {
+        SDL_Log("SDL_CreateWindow Error: %s", SDL_GetError());
+        SDL_Quit();
+        return 1;
+    }
 
-    // // Game g;
-    // // return g.run();
-    // SDL_Init(SDL_INIT_VIDEO);
-    // SDL_Window* window = SDL_CreateWindow("GAME", 100, 100, 800, 600, SDL_WINDOW_SHOWN);
-    // SDL_Renderer* renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
-    // // SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
-    // // SDL_RenderClear(renderer);
-    // // SDL_RenderPresent(renderer);
-    // bool running = true;
-    // int x = 0, y = 0;
-    // while (running) {
-    //     SDL_Event event;
-    //     while (SDL_PollEvent(&event)) {
-    //         if (event.type == SDL_QUIT) {
-    //             running = false;
-    //         }
-    //         if(event.type == SDL_MOUSEMOTION) {
-    //             x = event.motion.x;
-    //             y = event.motion.y;
-    //         }
-    //     }
-    //     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
-    //     SDL_RenderClear(renderer);
-        
-    //     SDL_Rect rect = {x-50, y-50, 100, 100};
+    SDL_Renderer* renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+    if (!renderer) {
+        SDL_Log("SDL_CreateRenderer Error: %s", SDL_GetError());
+        SDL_DestroyWindow(window);
+        SDL_Quit();
+        return 1;
+    }
 
-    //     SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
-    //     SDL_RenderFillRect(renderer, &rect);
+    
+    ComponentFactory factory(renderer);
 
 
-    //     SDL_RenderPresent(renderer);
-    // }   
-    // // SDL_DestroyRenderer(renderer);
-    // SDL_DestroyWindow(window);
-    // SDL_Quit(); 
+    // Create the engine
+    Engine engine("assets/level.xml", renderer);
+
+    // Create input handler
+    Input input;
+
+    // Register keys for movement
+    input.registerKey(SDL_SCANCODE_W);
+    input.registerKey(SDL_SCANCODE_A);
+    input.registerKey(SDL_SCANCODE_S);
+    input.registerKey(SDL_SCANCODE_D);
+
+    bool running = true;
+    Uint32 lastTime = SDL_GetTicks();
+
+    while (running) {
+        // Calculate delta time (dt)
+        Uint32 currentTime = SDL_GetTicks();
+        float dt = (currentTime - lastTime) / 1000.0f; // convert ms to seconds
+        lastTime = currentTime;
+
+        // Handle SDL events
+        SDL_Event event;
+        while (SDL_PollEvent(&event)) {
+            if (event.type == SDL_QUIT) running = false;
+        }
+
+        // Update input state
+        input.update();
+
+        // Update engine with input and delta time
+        engine.update(input, dt);
+
+        // Clear screen
+        SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+        SDL_RenderClear(renderer);
+        // Draw all game objects
+        engine.draw(renderer);
+
+        // Present the frame
+        SDL_RenderPresent(renderer);
+    }
+
+    SDL_DestroyRenderer(renderer);
+    SDL_DestroyWindow(window);
+    SDL_Quit();
+    return 0;
+}

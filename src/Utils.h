@@ -1,7 +1,7 @@
 #pragma once
 #include <SDL.h>
 
-const float WORLD_SCALE = 100;
+const float WORLD_SCALE = 100.0f;
 const int SCREEN_HEIGHT = 600;  // match your SDL window height
 
 // Converts world (x, y) to screen (pixel) coordinates

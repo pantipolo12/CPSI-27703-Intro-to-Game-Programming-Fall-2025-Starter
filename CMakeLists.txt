@@ -17,19 +17,17 @@ find_package(nlohmann_json CONFIG REQUIRED)
 # Create executable
 add_executable(demo 
     src/main.cpp 
-    src/Game.cpp 
-    src/Game.h
     src/Engine.h
-    src/Engine.cpp
-    src/Library.h
-    src/Library.cpp
-    src/Player.h
-    src/Player.cpp
-    src/Crate.h
-    src/Crate.cpp
-    src/Enemy.h
-    src/Enemy.cpp
     src/Utils.h
+    src/Component.h
+    src/ComponentFactory.h
+    src/BodyComponent.h
+    src/ControllerComponent.h
+    src/ControllerComponent.cpp
+    src/SpriteComponent.h
+    src/GameObject.h
+    src/Input.h
+    src/Input.cpp
     )
 
 # Link libraries
