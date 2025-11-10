@@ -28,6 +28,7 @@ int main(int argc, char* argv[])
     ImageDevice::load("tree1", "assets/tree1.png");
     ImageDevice::load("crate", "assets/crate.png");
     ImageDevice::load("background", "assets/backgroundSky.png");
+    ImageDevice::load("bee", "assets/bee.png");
     // ImageDevice::load("dude", "assets/dude.png");
 
     Object* background = e.addObject();
@@ -61,6 +62,10 @@ int main(int argc, char* argv[])
     grass->addComponent<SpriteComponent>("grass");
     e.setGroundY(e.getHeight() - grassHeight);
 
+    Object* bee = e.addObject();
+    bee->addComponent<BodyComponent>(100, 100, 100, 100);
+    bee->addComponent<SpriteComponent>("bee");
+    bee->addComponent<MissileComponent>(playerGIGI);
 
     Object* tree1 = e.addObject();
     tree1->addComponent<BodyComponent>(200, 400, 1250, 600);
