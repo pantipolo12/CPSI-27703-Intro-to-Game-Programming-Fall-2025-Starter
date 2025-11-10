@@ -14,21 +14,34 @@ find_package(tinyxml2 CONFIG REQUIRED)
 find_package(yaml-cpp CONFIG REQUIRED)
 find_package(nlohmann_json CONFIG REQUIRED)
 
-# Create executable
-add_executable(demo 
+add_executable(
+    demo 
     src/main.cpp 
+    src/Object.h
+    src/Object.cpp 
     src/Engine.h
-    src/Utils.h
-    src/Component.h
-    src/ComponentFactory.h
+    src/Engine.cpp 
+    src/ImageDevice.h
+    src/ImageDevice.cpp
+    src/InputDevice.h
+    src/InputDevice.cpp
     src/BodyComponent.h
-    src/ControllerComponent.h
-    src/ControllerComponent.cpp
+    src/BodyComponent.cpp
     src/SpriteComponent.h
-    src/GameObject.h
-    src/Input.h
-    src/Input.cpp
-    )
+    src/SpriteComponent.cpp
+    src/Component.h
+    src/Component.cpp
+    src/MissileComponent.h
+    src/MissileComponent.cpp
+    src/BounceComponent.h
+    src/BounceComponent.cpp
+    src/PhysicsComponent.h
+    src/PhysicsComponent.cpp
+    src/CharacterComponent.h
+    src/CharacterComponent.cpp
+    src/View.h
+    src/ControlerComponent.h
+)
 
 # Link libraries
 target_link_libraries(demo PRIVATE

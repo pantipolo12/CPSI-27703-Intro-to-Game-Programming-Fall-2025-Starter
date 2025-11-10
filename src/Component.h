@@ -1,19 +1,21 @@
 #pragma once
-#include <SDL.h>
 
-class GameObject;
-class Input;
+#include <string>
+
+// Forward declaration to avoid circular dependency
+class Object;
 
 class Component {
+protected:
+    Object* object{nullptr};
 public:
+    Component() = default;
     virtual ~Component() = default;
+    
+    virtual void update() {}
+    virtual void render() {}
 
-    virtual void update(float dt, const Input& input) = 0;
-    virtual void draw(SDL_Renderer* renderer) = 0;
+    void setObject(Object* object);
+    Object* getObject() { return object; }
 
-    void setParent(GameObject* p) { parentObj = p; }
-    GameObject& parent() { return *parentObj; }
-
-private:
-    GameObject* parentObj = nullptr;
 };

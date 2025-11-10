@@ -1,85 +1,95 @@
-#include <SDL.h>
-#include <SDL_image.h>
 #include "Engine.h"
-#include "Input.h"
+#include "Object.h"
+#include <iostream>
+#include "ImageDevice.h"
+#include "BodyComponent.h"
+#include "SpriteComponent.h"
+#include "MissileComponent.h"
+#include "BounceComponent.h"
+#include "PhysicsComponent.h"
+#include "CharacterComponent.h"
+#include "ControlerComponent.h"
+//Todo: MISSLE TRACK
+//MISSLE TEXTURE
+//MISSLECOMPONENT
 
-int main(int argc, char* argv[]) {
-    // Initialize SDL
-    if (SDL_Init(SDL_INIT_VIDEO) != 0) {
-        SDL_Log("SDL_Init Error: %s", SDL_GetError());
-        return 1;
-    }
 
-    if (IMG_Init(IMG_INIT_PNG) != IMG_INIT_PNG) {
-        SDL_Log("Failed to init SDL_image: %s", IMG_GetError());
-        return 1;
-    }
+
+
+
+int main(int argc, char* argv[]) 
+{
+    float grassHeight = 100; // choose the height of your ground
+
+    Engine e;
+    ImageDevice::load("playerGIGI", "assets/playerGIGI.png");
+    ImageDevice::load("grass", "assets/grass.png");
+    ImageDevice::load("tree", "assets/tree.png");
+    ImageDevice::load("tree1", "assets/tree1.png");
+    ImageDevice::load("crate", "assets/crate.png");
+    ImageDevice::load("background", "assets/backgroundSky.png");
+    // ImageDevice::load("dude", "assets/dude.png");
+
+    Object* background = e.addObject();
+    background->addComponent<BodyComponent>(400, 300, 800, 600);
+    background->addComponent<SpriteComponent>("background");
     
-
-    SDL_Window* window = SDL_CreateWindow("Component Game", 100, 100, 800, 600, SDL_WINDOW_SHOWN);
-    if (!window) {
-        SDL_Log("SDL_CreateWindow Error: %s", SDL_GetError());
-        SDL_Quit();
-        return 1;
-    }
-
-    SDL_Renderer* renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
-    if (!renderer) {
-        SDL_Log("SDL_CreateRenderer Error: %s", SDL_GetError());
-        SDL_DestroyWindow(window);
-        SDL_Quit();
-        return 1;
-    }
-
-    
-    ComponentFactory factory(renderer);
+    Object* tree = e.addObject();
+    tree->addComponent<BodyComponent>(400, 420, 1100, 400);
+    tree->addComponent<SpriteComponent>("tree");
 
 
-    // Create the engine
-    Engine engine("assets/level.xml", renderer);
+    Object* playerGIGI = e.addObject();
+    playerGIGI->addComponent<BodyComponent>(0, 0, 100, 150);
+    playerGIGI->addComponent<SpriteComponent>("playerGIGI");
+    playerGIGI->addComponent<BounceComponent>();
+    playerGIGI->addComponent<CharacterComponent>();
+    playerGIGI->addComponent<ControllerComponent>();
+    //playerGIGI->addComponent<PhysicsComponent>(0, 0.5f);
+    // Object* tree = e.addObject();
+    // tree->addComponent<BodyComponent>(0, 0, 50, 50);
+    // tree->addComponent<SpriteComponent>("tree");
 
-    // Create input handler
-    Input input;
 
-    // Register keys for movement
-    input.registerKey(SDL_SCANCODE_W);
-    input.registerKey(SDL_SCANCODE_A);
-    input.registerKey(SDL_SCANCODE_S);
-    input.registerKey(SDL_SCANCODE_D);
 
-    bool running = true;
-    Uint32 lastTime = SDL_GetTicks();
+    Object* crate = e.addObject();
+    crate->addComponent<BodyComponent>(675, 470, 200, 200);
+    crate->addComponent<SpriteComponent>("crate");
 
-    while (running) {
-        // Calculate delta time (dt)
-        Uint32 currentTime = SDL_GetTicks();
-        float dt = (currentTime - lastTime) / 1000.0f; // convert ms to seconds
+    Object* grass = e.addObject();
+    grass->addComponent<BodyComponent>(400, 550, 1000, 400);
+    grass->addComponent<SpriteComponent>("grass");
+    e.setGroundY(e.getHeight() - grassHeight);
+
+
+    Object* tree1 = e.addObject();
+    tree1->addComponent<BodyComponent>(200, 410, 1250, 600);
+    tree1->addComponent<SpriteComponent>("tree1");
+
+
+    // Object* missile = e.addObject();
+    // missile->addComponent<BodyComponent>(100, 100, 200, 40);
+    // missile->addComponent<SpriteComponent>("missile");
+    // missile->addComponent<MissileComponent>(target);
+    // obj->addComponent<ControllerComponent>();
+
+    int lastTime = SDL_GetTicks();
+    double fps = 0.0;
+    while(true)   
+    {
+        int frameStart = SDL_GetTicks();
+
+        e.update();
+        //e.setView(dude->getX()-400+50, dude->getY()-300+50);
+
+        int currentTime = SDL_GetTicks();
+     
+        fps = 1000.0f / (currentTime - lastTime);
         lastTime = currentTime;
+        // std::cout << "FPS: " << fps << std::endl;
+        // std::cout << "Frame Time: " << (currentTime-frameStart) << std::endl;
+        SDL_Delay((1000/200) - (currentTime-frameStart)/1000);
 
-        // Handle SDL events
-        SDL_Event event;
-        while (SDL_PollEvent(&event)) {
-            if (event.type == SDL_QUIT) running = false;
-        }
-
-        // Update input state
-        input.update();
-
-        // Update engine with input and delta time
-        engine.update(input, dt);
-
-        // Clear screen
-        SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
-        SDL_RenderClear(renderer);
-        // Draw all game objects
-        engine.draw(renderer);
-
-        // Present the frame
-        SDL_RenderPresent(renderer);
     }
-
-    SDL_DestroyRenderer(renderer);
-    SDL_DestroyWindow(window);
-    SDL_Quit();
     return 0;
 }
