@@ -1,13 +1,15 @@
 # Component-Based Game Engine Demo
 
-This project is a small 2D game demo built using a **component-based architecture** in C++ with SDL2. The assignment focuses on modularizing core game functionalities into reusable and interchangeable components.
+A **2D game engine demo** built in C++ using **SDL2**, designed to showcase a **component-based architecture**. Each `GameObject` is composed of modular, reusable components, allowing flexible creation of objects without relying on deep inheritance hierarchies.
+
+This project serves as both a **learning tool** for game engine design and a **demo environment** for experimenting with behaviors, rendering, and input handling.
 
 ---
 
 ## Table of Contents
 - [Overview](#overview)
 - [Features](#features)
-- [Components](#components)
+- [Architecture & Components](#architecture--components)
 - [Controls](#controls)
 - [Demo](#demo)
 - [Level XML Example](#level-xml-example)
@@ -19,59 +21,66 @@ This project is a small 2D game demo built using a **component-based architectur
 
 ## Overview
 
-The engine demonstrates a **component-based design** where each `GameObject` is composed of modular components. This allows flexible object creation without needing multiple subclasses for different object types.
+The engine uses a **component-based design**, meaning:
 
-Components handle specific responsibilities like rendering, movement, input, or behaviors. The engine supports loading game objects and components from XML for quick scene setup.
+- A `GameObject` is **just a container** for components.
+- Components encapsulate **specific responsibilities** such as rendering, physics, input, or behaviors.
+- New behaviors or object types can be added without changing core classes.
+
+Scenes can be defined entirely in **XML**, making level design fast and modular.
 
 ---
 
 ## Features
 
-- **Component System**: Add multiple components to a single `GameObject`.
-- **Sprite Rendering**: Display colored rectangles or PNG textures.
-- **Player Movement**: Controlled via `W`, `A`, `S`, `D`.
-- **Behavior Components**: Encapsulate logic like automated enemy movement.
-- **XML Level Loading**: Define objects and components via XML for easy modification.
+- **Component System** – Attach multiple components to a single `GameObject`.  
+- **Rendering** – Display textures or simple colored rectangles.  
+- **Input Handling** – Player movement with `W`, `A`, `S`, `D`.  
+- **Behavior Components** – Automated logic (e.g., enemy patrols).  
+- **XML Level Loading** – Load and configure objects via XML files.  
+- **Extensible Architecture** – Easily add new components and behaviors.  
 
-> ⚠️ **Collision Handling**: Not implemented yet. Objects currently can pass through each other.
+>**Note:** Collision detection is not implemented yet. Objects can currently pass through each other.
 
 ---
 
-## Components
+## Architecture & Components
 
 | Component | Description |
 |-----------|-------------|
-| `Component` | Abstract base class for all components. Provides `update()` and `draw()` methods. |
-| `SpriteComponent` | Handles rendering of textures or colored rectangles. |
-| `BodyComponent` | Manages object physics (position, velocity, angle). |
-| `ControllerComponent` | Handles player input for movement. |
-| `Behavior1Component` | Example behavior for automated movement (e.g., enemy patrol). |
-| `Behavior2Component` | Planned for future use (e.g., walls or interactive objects). |
+| `Component` | Abstract base class. Provides `update()` and `draw()` methods. |
+| `SpriteComponent` | Handles rendering textures or colored rectangles. |
+| `BodyComponent` | Manages position, velocity, and rotation. |
+| `ControllerComponent` | Processes player input for movement. |
+| `Behavior1Component` | Example automated behavior (e.g., enemy patrol). |
+| `Behavior2Component` | Placeholder for future behaviors (walls, triggers, etc.). |
+
+This modular approach allows **mix-and-match functionality**, reducing the need for subclassing every object type.
 
 ---
 
 ## Controls
 
-- `W` → Move Up  
-- `A` → Move Left  
-- `S` → Move Down  
-- `D` → Move Right  
-
-The player can move in all four directions. Diagonal movement is possible by pressing two keys simultaneously.
+- `W` - n/a  
+- `A` - Move Left  
+- `S` - n/a  
+- `D` - Move Right  
+- `Space` - Jump 
+> Diagonal movement is possible by pressing two keys simultaneously.
 
 ---
 
 ## Demo
 
-The demo scene contains:
+The demo scene includes:
 
-1. **Player** – green rectangle or texture (`assets/player.png`).
-2. **Enemy** – red rectangle that moves automatically using `Behavior1Component`.
-3. **Crate** – brown rectangle (static object).
+1. **Player** – Green rectangle or texture (`assets/player.png`) controlled by the player.  
+2. **Enemy** – Red rectangle with automated movement (`Behavior1Component`).  
+3. **Crate** – Brown rectangle, static object.
 
-> Currently, objects do not collide; the crate will not stop the player or enemy yet.
+> Objects currently do not collide. The player and enemy can pass through crates.
 
-![Demo Screenshot](assets/demo_screenshot.png)
+![Demo Screenshot](assets/myGameScreenShot.jpg)
 
 ---
 
@@ -97,43 +106,3 @@ The demo scene contains:
         <SpriteComponent r="139" g="69" b="19" />
     </GameObject>
 </Level>
-
-
-Project Structure
-
-/assets
-    player.png
-    demo_screenshot.png
-    level.xml
-/src
-    main.cpp
-    Engine.h/cpp
-    GameObject.h/cpp
-    Component.h/cpp
-    SpriteComponent.h/cpp
-    BodyComponent.h/cpp
-    ControllerComponent.h/cpp
-    Behavior1Component.h/cpp
-    ComponentFactory.h/cpp
-    Input.h/cpp
-README.md
-
-
-Notes
-
-Uses SDL2 and SDL2_image for graphics.
-
-Game objects and components are loaded from XML.
-
-Collision detection is planned for future implementation.
-
-The architecture allows easy addition of new components and behaviors.
-
-
-Building & Running
-
-Ensure SDL2 and SDL2_image are installed on your system.
-
-Compile the project. Example using g++:
-
-g++ src/*.cpp -o GameDemo -lSDL2 -lSDL2_image
