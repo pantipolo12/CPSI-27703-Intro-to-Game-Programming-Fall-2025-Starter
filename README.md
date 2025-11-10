@@ -80,7 +80,7 @@ The demo scene includes:
 
 > Objects currently do not collide. The player and enemy can pass through crates.
 
-![Demo Screenshot](assets/myGameScreenShot.jpg)
+![Demo Screenshot](assets/myGameScreenShot.JPG)
 
 ---
 
