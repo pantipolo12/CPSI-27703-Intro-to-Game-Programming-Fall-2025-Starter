@@ -35,7 +35,7 @@ int main(int argc, char* argv[])
     background->addComponent<SpriteComponent>("background");
     
     Object* tree = e.addObject();
-    tree->addComponent<BodyComponent>(400, 420, 1100, 400);
+    tree->addComponent<BodyComponent>(400, 425, 1100, 400);
     tree->addComponent<SpriteComponent>("tree");
 
 
@@ -53,7 +53,7 @@ int main(int argc, char* argv[])
 
 
     Object* crate = e.addObject();
-    crate->addComponent<BodyComponent>(675, 470, 200, 200);
+    crate->addComponent<BodyComponent>(675, 455, 250, 200);
     crate->addComponent<SpriteComponent>("crate");
 
     Object* grass = e.addObject();
@@ -63,7 +63,7 @@ int main(int argc, char* argv[])
 
 
     Object* tree1 = e.addObject();
-    tree1->addComponent<BodyComponent>(200, 410, 1250, 600);
+    tree1->addComponent<BodyComponent>(200, 400, 1250, 600);
     tree1->addComponent<SpriteComponent>("tree1");
 
 
