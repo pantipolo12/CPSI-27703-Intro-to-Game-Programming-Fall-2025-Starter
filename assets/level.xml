@@ -1,29 +1,54 @@
-<!--
 <?xml version="1.0"?>
 <Level>
-    <GameObject id="player">
-        <BodyComponent x="2" y="1" angle="0" />
-        <SpriteComponent r="0" g="255" b="0" image="assets/player.png"/>
-        <ControllerComponent speed="3" />
+    <GameObject id="background">
+        <BodyComponent x="0" y="0" w="800" h="600"/>
+        <SpriteComponent image="background" />
     </GameObject>
 
-    <GameObject id="enemy">
-        <BodyComponent x="6" y="1" angle="0" />
-        <SpriteComponent r="255" g="0" b="0" />
-        <Behavior1Component speed="1.5" minX="2" maxX="6" />
+
+    <GameObject id="tree">
+        <BodyComponent x="0" y="0" w="400" h="600" />
+        <SpriteComponent image="tree" />
     </GameObject>
+
+
+    <GameObject id="playerGIGI">
+        <BodyComponent x="100" y="100" w="50" h="150" />
+        <SpriteComponent image="playerGIGI" />
+        <CharacterComponent />
+    </GameObject> 
+
 
     <GameObject id="crate">
-        <BodyComponent x="4" y="1" angle="0" />
-        <SpriteComponent r="139" g="69" b="19" />
+        <BodyComponent x="675" y="455" w="250" h="200" />
+        <SpriteComponent image="crate" />
     </GameObject>
 
-<GameObject id="ground">
-    <BodyComponent x="400" y="600" angle="0" /> <!-- 400px horizontal, bottom of screen -->
-    <SpriteComponent r="100" g="100" b="100" width="800" height="50"/> <!-- full width ground -->
-</GameObject>
+
+    <GameObject id="grass">
+        <BodyComponent x="0" y="550" w="750" h="100" />
+        <SpriteComponent image="grass" />
+        <GroundComponent/>
+    </GameObject>
+
+    <GameObject id="grass1">
+        <BodyComponent x="900" y="550" w="750" h="100" />
+        <SpriteComponent image="grass" />
+        <GroundComponent/>
+    </GameObject>
 
 
+    <GameObject id="bee">
+        <BodyComponent x="100" y="100" w="100" h="100" />
+        <SpriteComponent image="bee" />
+        <MissileComponent target="playerGIGI" />
+    </GameObject>
 
+
+    <GameObject id="tree1">
+        <BodyComponent x="0" y="0" w="400" h="600" />
+        <SpriteComponent image="tree" />
+    </GameObject>
 </Level>
--->
+
+

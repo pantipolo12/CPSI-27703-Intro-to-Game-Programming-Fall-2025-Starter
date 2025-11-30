@@ -1,10 +1,46 @@
 #include "ImageDevice.h"
 #include "Engine.h"
+#include "tinyxml2.h"
 #include <SDL_image.h>
 #include <iostream>
 
+using namespace tinyxml2;
+
+
 // Static member definitions
 std::unordered_map<std::string, SDL_Texture*> ImageDevice::textures;
+
+
+bool ImageDevice::loadFromXML(const std::string& xmlPath)
+{
+    XMLDocument doc;
+    if (doc.LoadFile(xmlPath.c_str()) != XML_SUCCESS) {
+        std::cerr << "Failed to load asset XML: " << xmlPath << std::endl;
+        return false;
+    }
+
+    XMLElement* root = doc.FirstChildElement("Assets");
+    if (!root) {
+        std::cerr << "No <Assets> root element in " << xmlPath << std::endl;
+        return false;
+    }
+
+    for (XMLElement* tex = root->FirstChildElement("Texture"); tex; tex = tex->NextSiblingElement("Texture")) {
+        const char* name = tex->Attribute("name");
+        const char* file = tex->Attribute("file");
+
+        if (name && file) {
+            if (!ImageDevice::exists(name)) {
+                ImageDevice::load(name, file);
+                std::cout << "Loaded texture: " << name << " from " << file << std::endl;
+            }
+        } else {
+            std::cerr << "Texture entry missing name or file attribute in " << xmlPath << std::endl;
+        }
+    }
+
+    return true;
+}
 
 bool ImageDevice::load(const std::string& name, const std::string& imagePath) {
     // Load the image surface
@@ -17,7 +53,6 @@ bool ImageDevice::load(const std::string& name, const std::string& imagePath) {
     // Create texture from surface
     SDL_Texture* texture = SDL_CreateTextureFromSurface(Engine::E->getRenderer(), surface);
     SDL_FreeSurface(surface);
-    
     if (!texture) {
         std::cerr << "ImageDevice: Failed to create texture from '" << imagePath << "': " << SDL_GetError() << std::endl;
         return false;
@@ -76,7 +111,6 @@ SDL_Texture* ImageDevice::get(const std::string& name) {
 }
 
 
-
 void ImageDevice::cleanup() {
     for (auto& pair : textures) {
         if (pair.second) {
@@ -90,5 +124,4 @@ void ImageDevice::cleanup() {
 bool ImageDevice::exists(const std::string& name) {
     return textures.find(name) != textures.end();
 }
-
 

@@ -13,10 +13,9 @@ public:
     void setGravityX(float newGravityX) { gravityX = newGravityX; }
     void setGravityY(float newGravityY) { gravityY = newGravityY; }
     
-    void update() override;
+    void update(float dt) override;
 
 private:
     float gravityX;
     float gravityY;
 };
-

@@ -14,3 +14,4 @@ public:
 private:
     static std::unordered_set<SDL_Scancode> pressedKeys;      // Keys currently held down
 };
+

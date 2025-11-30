@@ -3,7 +3,6 @@
 #include <unordered_map>
 #include <SDL.h>
 
-
 class ImageDevice {
 public:
     // Load texture from image file with optional source rectangle
@@ -12,6 +11,9 @@ public:
     
     // Get texture by name
     static SDL_Texture* get(const std::string& name);
+
+    // Load multiple textures from an XML file
+    static bool loadFromXML(const std::string& xmlPath);
     
     // Cleanup all textures
     static void cleanup();
@@ -22,3 +24,4 @@ public:
 private:
     static std::unordered_map<std::string, SDL_Texture*> textures;
 };
+

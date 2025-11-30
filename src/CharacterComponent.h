@@ -4,6 +4,7 @@
 class CharacterComponent : public Component {
 public:
     
-    void update() override;
+    void update(float dt) override;
+    void drawDebug(SDL_Renderer* renderer);
 };
 

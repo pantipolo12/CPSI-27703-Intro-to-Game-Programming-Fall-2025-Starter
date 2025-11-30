@@ -41,6 +41,9 @@ add_executable(
     src/CharacterComponent.cpp
     src/View.h
     src/ControlerComponent.h
+    src/LevelLoader.h
+    src/LevelLoader.cpp
+    src/SolidComponent.h
 )
 
 # Link libraries

@@ -12,9 +12,8 @@ public:
     void setTarget(Object* newTarget) { target = newTarget; }
     
     // Blank update for now
-    void update() override;
+    void update(float dt) override;
 
 private:
     Object* target;
 };
-

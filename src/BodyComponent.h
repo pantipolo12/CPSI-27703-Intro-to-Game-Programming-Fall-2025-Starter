@@ -1,11 +1,12 @@
 #pragma once
 #include "Component.h"
 #include <string>
-
+#include <SDL2/SDL.h>
 class BodyComponent : public Component {
 public:
     BodyComponent(float x=0, float y=0, float width=100, float height=100, float angle=0, float vx=0, float vy=0);
     // Getters
+    SDL_Rect getRect() const;
     float getX() const { return x; }
     float getY() const { return y; }
     float getWidth() const { return width; }
@@ -21,10 +22,8 @@ public:
     void setVx(float newVx) { vx = newVx; }
     void setVy(float newVy) { vy = newVy; }
     void setAngle(float newAngle) { angle = newAngle; }
-
-    void update() override;
-    // update() and render() don't need to be overridden - using defaults from Component
-
+    void update(float dt) override;
+    // update() and render() don&#39;t need to be overridden - using defaults from Component
 private:
     float x;
     float y;

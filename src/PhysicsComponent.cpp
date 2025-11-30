@@ -2,58 +2,61 @@
 #include "BodyComponent.h"
 #include "Object.h"
 #include "Engine.h"
+#include "GroundComponent.h"
 #include <cmath>
 
 PhysicsComponent::PhysicsComponent(float gravityX, float gravityY)
     : gravityX(gravityX), gravityY(gravityY) {}
 
-void PhysicsComponent::update() {
+void PhysicsComponent::update(float dt) {
     Object* obj = getObject();
     if (!obj) return;
 
     BodyComponent* body = obj->getComponent<BodyComponent>();
     if (!body) return;
 
-    // 1️⃣ Apply gravity
-    body->setVx(body->getVx() + gravityX);
+    // Apply gravity
     body->setVy(body->getVy() + gravityY);
+    body->setVx(body->getVx() + gravityX);
 
-    // 2️⃣ Move object
     float newX = body->getX() + body->getVx();
     float newY = body->getY() + body->getVy();
-    body->setX(newX);
-    body->setY(newY);
 
-    // 3️⃣ Ground collision
-    float groundY = Engine::E->getGroundY() - body->getHeight() / 2.0f;
-    if (body->getY() > groundY) {
-        body->setY(groundY);
-        body->setVy(0);
-    }
-
-    // 4️⃣ Check collision with other objects (e.g., crates)
+    // 1️⃣ Get all objects in the world
     auto& objects = Engine::E->getObjects();
+
     for (auto& otherObj : objects) {
         if (otherObj.get() == obj) continue; // skip self
+
+        // Only check objects with BodyComponent
         BodyComponent* otherBody = otherObj->getComponent<BodyComponent>();
         if (!otherBody) continue;
 
-        // Simple AABB collision
-        bool overlapX = std::abs(body->getX() - otherBody->getX()) < (body->getWidth() + otherBody->getWidth()) / 2.0f;
-        bool overlapY = std::abs(body->getY() - otherBody->getY()) < (body->getHeight() + otherBody->getHeight()) / 2.0f;
+        // Only collide with ground
+        if (!otherObj->getComponent<GroundComponent>()) continue;
+
+        // AABB collision detection
+        bool overlapX = newX + body->getWidth() > otherBody->getX() &&
+                        newX < otherBody->getX() + otherBody->getWidth();
+        bool overlapY = newY + body->getHeight() > otherBody->getY() &&
+                        newY < otherBody->getY() + otherBody->getHeight();
 
         if (overlapX && overlapY) {
-            // Push out on Y axis
+            // Only fix vertical collisions
             if (body->getVy() > 0) { // falling
-                body->setY(otherBody->getY() - (body->getHeight() + otherBody->getHeight()) / 2.0f);
+                newY = otherBody->getY() - body->getHeight();
                 body->setVy(0);
             } else if (body->getVy() < 0) { // jumping
-                body->setY(otherBody->getY() + (body->getHeight() + otherBody->getHeight()) / 2.0f);
+                newY = otherBody->getY() + otherBody->getHeight();
                 body->setVy(0);
             }
         }
     }
 
-    // Optional: apply simple friction
+    // Apply final positions
+    body->setX(newX);
+    body->setY(newY);
+
+    // Optional: horizontal friction
     body->setVx(body->getVx() * 0.98f);
 }

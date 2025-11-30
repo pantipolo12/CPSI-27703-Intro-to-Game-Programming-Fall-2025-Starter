@@ -28,17 +28,20 @@ void SpriteComponent::draw() {
     SDL_Rect screenRect = Engine::E->getView().transform(worldRect);
 
     SDL_RenderCopy(renderer, tex, nullptr, &screenRect);
+    std::cout << "DRAW "
+          << textureName 
+          << " worldY=" << body->getY()
+          << " screenY=" << screenRect.y
+          << " camY=" << Engine::E->getView().y
+          << std::endl;
+
+}
+void SpriteComponent::render() {
+    draw();  // Move all drawing into one unified method
 }
 
-
-void SpriteComponent::render() {
-    // Placeholder implementation
-    Object* object = getObject();
-    BodyComponent* body = object->getComponent<BodyComponent>();
-    if(!body) {
-        std::cout << "BodyComponent not found" << std::endl;
-        return;
-    }
-    // std::cout << "SPRITE ANGLE: " << body->getAngle() << std::endl;
-    Engine::drawImage(textureName,body->getX(), body->getY(), body->getWidth(), body->getHeight(),body->getAngle());
+void SpriteComponent::setParallax(float factor)
+{
+    parallaxFactor = factor;
+    screenSpace = true; // render ignoring camera
 }

@@ -6,7 +6,7 @@
 BounceComponent::BounceComponent() {
 }
 
-void BounceComponent::update() {
+void BounceComponent::update(float dt) {
     checkBounds();
 }
 

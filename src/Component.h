@@ -12,7 +12,7 @@ public:
     Component() = default;
     virtual ~Component() = default;
     
-    virtual void update() {}
+    virtual void update(float dt) {}
     virtual void render() {}
 
     void setObject(Object* object);

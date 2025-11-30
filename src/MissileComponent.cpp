@@ -7,7 +7,7 @@ MissileComponent::MissileComponent(Object* target)
     : target(target) {
 }
 
-void MissileComponent::update() {
+void MissileComponent::update(float dt) {
     Object* body = getObject();
     BodyComponent* bodyComp = body->getComponent<BodyComponent>();
     Object* target = getTarget();
@@ -27,7 +27,6 @@ void MissileComponent::update() {
     bodyComp->setVx(xSpeed);
     bodyComp->setVy(ySpeed);
 
-
     bodyComp->setAngle(angle);
     if(hypot(targetX-bodyX, targetY-bodyY) < 5) {
         targetComp ->setX(rand() % 640);
@@ -36,4 +35,3 @@ void MissileComponent::update() {
         targetComp ->setVy(rand() % 3 - 1);
     }
 }
-

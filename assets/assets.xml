@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<Assets>
+    <Texture name="playerGIGI" file="assets/playerGIGI.png" />
+    <Texture name="grass" file="assets/grass.png" />
+    <Texture name="tree" file="assets/tree.png" />
+    <Texture name="tree1" file="assets/tree1.png" />
+    <Texture name="crate" file="assets/crate.png" />
+    <Texture name="background" file="assets/backgroundSky.png" />
+    <Texture name="bee" file="assets/bee.png" />
+</Assets>

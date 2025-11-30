@@ -1,99 +1,110 @@
-#include "Engine.h"
-#include "Object.h"
-#include <iostream>
-#include "ImageDevice.h"
 #include "BodyComponent.h"
-#include "SpriteComponent.h"
-#include "MissileComponent.h"
-#include "BounceComponent.h"
-#include "PhysicsComponent.h"
-#include "CharacterComponent.h"
-#include "ControlerComponent.h"
-//Todo: MISSLE TRACK
-//MISSLE TEXTURE
-//MISSLECOMPONENT
+#include "GroundComponent.h"
+#include "SpriteComponent.h" // if needed later for rendering
+#include "Engine.h"
+#include "ImageDevice.h"
+#include "LevelLoader.h"
+#include <SDL.h>
+#include <iostream>
 
-
-
-
-
-int main(int argc, char* argv[]) 
+int main(int argc, char* argv[])
 {
-    float grassHeight = 100; // choose the height of your ground
-
     Engine e;
-    ImageDevice::load("playerGIGI", "assets/playerGIGI.png");
-    ImageDevice::load("grass", "assets/grass.png");
-    ImageDevice::load("tree", "assets/tree.png");
-    ImageDevice::load("tree1", "assets/tree1.png");
-    ImageDevice::load("crate", "assets/crate.png");
-    ImageDevice::load("background", "assets/backgroundSky.png");
-    ImageDevice::load("bee", "assets/bee.png");
-    // ImageDevice::load("dude", "assets/dude.png");
 
-    Object* background = e.addObject();
-    background->addComponent<BodyComponent>(400, 300, 800, 600);
-    background->addComponent<SpriteComponent>("background");
-    
-    Object* tree = e.addObject();
-    tree->addComponent<BodyComponent>(400, 425, 1100, 400);
-    tree->addComponent<SpriteComponent>("tree");
+    // STEP 1: Load all textures (from XML)
+    if (!ImageDevice::loadFromXML("assets/assets.xml")) {
+        std::cerr << "Failed to load assets.xml" << std::endl;
+        return -1;
+    }
 
+    // STEP 2: Load all game objects (from XML)
+    if (!LevelLoader::load("assets/level.xml", e)) {
+        std::cerr << "Failed to load level.xml" << std::endl;
+        return -1;
+    }
 
-    Object* playerGIGI = e.addObject();
-    playerGIGI->addComponent<BodyComponent>(0, 0, 100, 150);
-    playerGIGI->addComponent<SpriteComponent>("playerGIGI");
-    playerGIGI->addComponent<BounceComponent>();
-    playerGIGI->addComponent<CharacterComponent>();
-    playerGIGI->addComponent<ControllerComponent>();
-    //playerGIGI->addComponent<PhysicsComponent>(0, 0.5f);
-    // Object* tree = e.addObject();
-    // tree->addComponent<BodyComponent>(0, 0, 50, 50);
-    // tree->addComponent<SpriteComponent>("tree");
+    // STEP 3: Configure the world
+    e.setWorldSize(2000, 1200);
 
+    // STEP 4: Main game loop with frame limiting
+    const int targetFPS = 200;
+    const int frameDelay = 1000 / targetFPS;
+    Uint32 lastTime = SDL_GetTicks();
 
-
-    Object* crate = e.addObject();
-    crate->addComponent<BodyComponent>(675, 455, 250, 200);
-    crate->addComponent<SpriteComponent>("crate");
-
-    Object* grass = e.addObject();
-    grass->addComponent<BodyComponent>(400, 550, 1000, 400);
-    grass->addComponent<SpriteComponent>("grass");
-    e.setGroundY(e.getHeight() - grassHeight);
-
-    Object* bee = e.addObject();
-    bee->addComponent<BodyComponent>(100, 100, 100, 100);
-    bee->addComponent<SpriteComponent>("bee");
-    bee->addComponent<MissileComponent>(playerGIGI);
-
-    Object* tree1 = e.addObject();
-    tree1->addComponent<BodyComponent>(200, 400, 1250, 600);
-    tree1->addComponent<SpriteComponent>("tree1");
-
-
-    // Object* missile = e.addObject();
-    // missile->addComponent<BodyComponent>(100, 100, 200, 40);
-    // missile->addComponent<SpriteComponent>("missile");
-    // missile->addComponent<MissileComponent>(target);
-    // obj->addComponent<ControllerComponent>();
-
-    int lastTime = SDL_GetTicks();
-    double fps = 0.0;
-    while(true)   
+    while (true)
     {
-        int frameStart = SDL_GetTicks();
+        Uint32 frameStart = SDL_GetTicks();
+        float dt = (frameStart - lastTime) / 1000.0f; // convert ms - secs
+        lastTime = frameStart;
 
         e.update();
-        //e.setView(dude->getX()-400+50, dude->getY()-300+50);
 
-        int currentTime = SDL_GetTicks();
-     
-        fps = 1000.0f / (currentTime - lastTime);
-        lastTime = currentTime;
-        // std::cout << "FPS: " << fps << std::endl;
-        // std::cout << "Frame Time: " << (currentTime-frameStart) << std::endl;
-        SDL_Delay((1000/200) - (currentTime-frameStart)/1000);
+        SDL_Renderer* renderer = e.getRenderer();
+        View& view = e.getView();
+
+        SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);  // clear screan
+
+        for(auto& objPtr : e.getObjects())
+        {
+            Object* obj = objPtr.get();  // get raw pointer from unique_ptr
+            if(auto* body = obj->getComponent<BodyComponent>())
+            {
+                SDL_Rect rect = view.transform(body->getRect());
+
+                if(obj == e.getPlayer())
+                {
+                    SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255); // player = red
+                } 
+                else if(obj->getComponent<GroundComponent>())
+                {
+                    SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255); // ground = green
+                }
+                else 
+                {
+                    SDL_SetRenderDrawColor(renderer, 0, 0, 255, 255); // other objects = blue
+                }
+
+                SDL_RenderDrawRect(renderer, &rect);
+            }
+        }
+
+        SDL_RenderPresent(renderer);
+
+        auto* playerBody = e.getPlayer()->getComponent<BodyComponent>(); // assuming player exists
+
+        if(playerBody)
+        {
+            std::cout << "Player Y: " << playerBody->getY() << "\n";
+        } 
+
+        for(auto& obj : e.getObjects())
+        {
+            if(auto* ground = obj->getComponent<GroundComponent>())
+            {
+                BodyComponent* body = obj->getComponent<BodyComponent>();
+
+                if(!body) continue;
+
+                std::cout << "Ground Y: " << body->getY() << ", Height: " <<
+                body->getHeight() << "\n";
+            }
+        }
+
+        for(auto& obj : e.getObjects())
+        {
+            if(auto* body = obj->getComponent<BodyComponent>())
+            {
+                SDL_Rect rect = view.transform(body->getRect());
+                SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255); // red box
+                SDL_RenderDrawRect(renderer, &rect);
+            }
+        }
+
+        Uint32 frameTime = SDL_GetTicks() - frameStart;
+        if(frameDelay > frameTime)
+            SDL_Delay(frameDelay - frameTime);
+
+        lastTime = SDL_GetTicks();
 
     }
     return 0;
