@@ -1,35 +1,59 @@
 #pragma once
 #include "Component.h"
-#include <string>
-#include <SDL2/SDL.h>
-class BodyComponent : public Component {
-public:
-    BodyComponent(float x=0, float y=0, float width=100, float height=100, float angle=0, float vx=0, float vy=0);
-    // Getters
-    SDL_Rect getRect() const;
-    float getX() const { return x; }
-    float getY() const { return y; }
-    float getWidth() const { return width; }
-    float getHeight() const { return height; }
-    float getVx() const { return vx; }
-    float getVy() const { return vy; }
-    float getAngle() const { return angle; }
-    // Setters
-    void setX(float newX) { x = newX; }
-    void setY(float newY) { y = newY; }
-    void setWidth(float newWidth) { width = newWidth; }
-    void setHeight(float newHeight) { height = newHeight; }
-    void setVx(float newVx) { vx = newVx; }
-    void setVy(float newVy) { vy = newVy; }
-    void setAngle(float newAngle) { angle = newAngle; }
-    void update(float dt) override;
-    // update() and render() don&#39;t need to be overridden - using defaults from Component
+#include <box2d/box2d.h>
+#include <SDL.h>
+
+// Forward declaration
+class Object;
+ 
+class BodyComponent : public Component { 
+public: BodyComponent(b2WorldId world, float x, float y, float w, float h, bool isDynamic = true, float worldHeight = 1200.0f);
+~BodyComponent(); 
+// Position and size 
+float getX() const; 
+float getY() const; 
+float getWidth() const { return width; } 
+float getHeight() const { return height; } 
+void setX(float x); 
+void setY(float y); 
+SDL_Rect getRect() const; 
+// Velocity f
+float getVx() const; 
+float getVy() const; 
+void setVx(float vx); 
+void setVy(float vy); 
+void setLinearVelocity(const b2Vec2& vel); 
+b2Vec2 getLinearVelocity() const;
+
+// Force and impulse
+void applyForce(const b2Vec2& force, const b2Vec2& point);
+void applyForceToCenter(const b2Vec2& force);
+void applyLinearImpulse(const b2Vec2& impulse, const b2Vec2& point);
+void applyLinearImpulseToCenter(const b2Vec2& impulse);
+
+// Angular velocity
+float getAngularVelocity() const;
+void setAngularVelocity(float angularVelocity);
+
+// Angle 
+
+float getAngle() const; 
+void setAngle(float angle); 
+b2BodyId getBody() const { return body; } 
+b2WorldId getWorld() const { return world; }
+
+// Set userData when component is attached to object
+void initializeUserData();
+
 private:
-    float x;
-    float y;
-    float vx;
-    float vy;
-    float angle;
-    float width;
-    float height;
+b2WorldId world; 
+b2BodyId body; 
+float width; 
+float height; 
+float worldHeight; 
+b2ShapeId shape{}; 
+// Coordinate conversion: SDL uses Y-down, Box2D uses Y-up 
+float sdlToBox2DY(float sdlY) const { return worldHeight - sdlY; } 
+float box2DToSDLY(float box2DY) const { return worldHeight - box2DY; }
+
 };

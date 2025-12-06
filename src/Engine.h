@@ -2,6 +2,7 @@
 #include <vector>
 #include <memory>
 #include <SDL.h>
+#include <box2d/box2d.h>
 #include "Object.h"
 #include "View.h"
 
@@ -51,6 +52,34 @@ public:
         Object* getPlayer() { return player; }  // player is already stored via setPlayer()
         Object* findObjectById(const std::string& id);
         void updateViewWithParallax(Object* player, float parallaxFactor);
+        b2WorldId getWorldId() const { return worldId; }
+        
+        // Physics queries
+        struct RaycastResult {
+            bool hit;
+            b2Vec2 point;
+            b2Vec2 normal;
+            float fraction;
+            Object* object;
+        };
+        RaycastResult castRay(float x1, float y1, float x2, float y2);
+        
+        struct AABBQueryResult {
+            std::vector<Object*> objects;
+        };
+        AABBQueryResult queryAABB(float x, float y, float width, float height);
+        
+        // Contact handling
+        void processContactEvents();
+        
+        // Runtime body management
+        Object* createDynamicBody(float x, float y, float w, float h);
+        Object* createStaticBody(float x, float y, float w, float h);
+        void removeObject(Object* obj);
+        void removeObjectById(const std::string& id);
+        
+        // Interactive controls (for demo)
+        void handlePhysicsControls();
   
 private:
     Object* player = nullptr;
@@ -65,9 +94,37 @@ private:
     // Ground level (Y coordinate of the top of the ground)
     float groundY{600}; // Default bottom of window
     
+    // Box2D world
+    b2WorldId worldId{};
+    
+    // Contact event tracking
+    int lastContactBeginCount = 0;
+    int lastContactEndCount = 0;
+    int lastContactHitCount = 0;
+    
+    // Raycast visualization
+    struct RaycastVisual {
+        float x1, y1, x2, y2;
+        bool hit;
+        b2Vec2 hitPoint;
+        float lifetime;
+    };
+    std::vector<RaycastVisual> raycastVisuals;
+    
+    // AABB query visualization
+    struct AABBQueryVisual {
+        float x, y, w, h;
+        float lifetime;
+    };
+    std::vector<AABBQueryVisual> aabbQueryVisuals;
+    
     // Internal methods
     void processInput();
     //void updateView();
     void updateObjects();
     void render();
+    
+    // Helper for coordinate conversion
+    float sdlToBox2DY(float sdlY) const { return view.worldHeight - sdlY; }
+    float box2DToSDLY(float box2DY) const { return view.worldHeight - box2DY; }
 };

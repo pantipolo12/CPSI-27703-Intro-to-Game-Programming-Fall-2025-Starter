@@ -22,3 +22,14 @@
 1341	4216	7867268952602832	demo.exe	a076c83845b568e9
 9	983	7867269781332022	CMakeFiles/demo.dir/src/LevelLoader.cpp.obj	5c3207ef24f65950
 984	3507	7867269791070552	demo.exe	a076c83845b568e9
+9	1059	7867273605185938	CMakeFiles/demo.dir/src/Object.cpp.obj	a4c3ae791559877b
+15	1159	7867273605245736	CMakeFiles/demo.dir/src/SpriteComponent.cpp.obj	603a7737f199a45c
+18	1161	7867273605261299	CMakeFiles/demo.dir/src/BounceComponent.cpp.obj	22b39b6adf2f1079
+7	1187	7867273605155968	CMakeFiles/demo.dir/src/main.cpp.obj	f1c2abbdb6f831d4
+20	1210	7867273605294268	CMakeFiles/demo.dir/src/PhysicsComponent.cpp.obj	f4f34e4f4cf8a5f9
+34	1237	7867273605432682	CMakeFiles/demo.dir/src/AnimateComponent.cpp.obj	cfe11c7c1a96fc7
+28	1264	7867273605366928	CMakeFiles/demo.dir/src/CharacterComponent.cpp.obj	b0971f5f57673c2
+13	1264	7867273605225780	CMakeFiles/demo.dir/src/ImageDevice.cpp.obj	9a6050e015baad26
+32	1496	7867273605402754	CMakeFiles/demo.dir/src/LevelLoader.cpp.obj	5c3207ef24f65950
+11	1521	7867273605205829	CMakeFiles/demo.dir/src/Engine.cpp.obj	79d896b6ef6d8de2
+1521	4119	7867273620301705	demo.exe	a076c83845b568e9

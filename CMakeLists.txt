@@ -44,6 +44,8 @@ add_executable(
     src/LevelLoader.h
     src/LevelLoader.cpp
     src/SolidComponent.h
+    src/AnimateComponent.h
+    src/AnimateComponent.cpp
 )
 
 # Link libraries

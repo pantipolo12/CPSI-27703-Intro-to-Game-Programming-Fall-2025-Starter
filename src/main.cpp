@@ -24,10 +24,10 @@ int main(int argc, char* argv[])
     }
 
     // STEP 3: Configure the world
-    e.setWorldSize(2000, 1200);
+    e.setWorldSize(5000, 1200);
 
     // STEP 4: Main game loop with frame limiting
-    const int targetFPS = 200;
+    const int targetFPS = 60;  // Reduced to 60 FPS for more consistent physics
     const int frameDelay = 1000 / targetFPS;
     Uint32 lastTime = SDL_GetTicks();
 
@@ -35,6 +35,7 @@ int main(int argc, char* argv[])
     {
         Uint32 frameStart = SDL_GetTicks();
         float dt = (frameStart - lastTime) / 1000.0f; // convert ms - secs
+        if (dt > 0.1f) dt = 0.1f;  // Cap dt to prevent large jumps
         lastTime = frameStart;
 
         e.update();
@@ -42,8 +43,17 @@ int main(int argc, char* argv[])
         SDL_Renderer* renderer = e.getRenderer();
         View& view = e.getView();
 
-        SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);  // clear screan
+        SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);  // clear screen
+        SDL_RenderClear(renderer);
 
+        // First, render all sprites
+        for(auto& objPtr : e.getObjects())
+        {
+            Object* obj = objPtr.get();
+            obj->render();  // This will render SpriteComponents
+        }
+
+        // Then, draw debug boxes on top
         for(auto& objPtr : e.getObjects())
         {
             Object* obj = objPtr.get();  // get raw pointer from unique_ptr
@@ -90,15 +100,6 @@ int main(int argc, char* argv[])
             }
         }
 
-        for(auto& obj : e.getObjects())
-        {
-            if(auto* body = obj->getComponent<BodyComponent>())
-            {
-                SDL_Rect rect = view.transform(body->getRect());
-                SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255); // red box
-                SDL_RenderDrawRect(renderer, &rect);
-            }
-        }
 
         Uint32 frameTime = SDL_GetTicks() - frameStart;
         if(frameDelay > frameTime)

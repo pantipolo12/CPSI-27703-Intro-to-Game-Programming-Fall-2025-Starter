@@ -7,6 +7,7 @@
 #include <unordered_map>
 #include <string>
 #include <iostream>
+#include <typeinfo>
 
 
 class View;
@@ -39,8 +40,12 @@ public:
         std::string name = typeid(T).name();
         components[name] = std::move(component);
         components[name]->setObject(this);
-        return static_cast<T*>(components[name].get());
+        T* comp = static_cast<T*>(components[name].get());
+        return comp;
     }
+    
+    // Call this after adding a BodyComponent to initialize userData
+    void initializeBodyComponentUserData();
 
 
     template<typename T>

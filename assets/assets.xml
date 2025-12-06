@@ -7,4 +7,10 @@
     <Texture name="crate" file="assets/crate.png" />
     <Texture name="background" file="assets/backgroundSky.png" />
     <Texture name="bee" file="assets/bee.png" />
+    <Texture name="playerGIGIwalk" file="assets/playerGIGIwalk.png" />
+    <Texture name="sky" file="assets/background/Sky.png" />
+    <Texture name="clouds" file="assets/background/Clouds.png" />
+    <Texture name="layer3" file="assets/background/BGLayer3.png" />
+    <Texture name="layer2" file="assets/background/BGLayer2.png" />
+    <Texture name="layer1" file="assets/background/BGLayer1.png" />
 </Assets>

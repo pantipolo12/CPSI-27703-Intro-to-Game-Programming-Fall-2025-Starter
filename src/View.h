@@ -11,7 +11,7 @@ public:
     int screenHeight = 600;
     // World bounds for camera clamping
     int worldWidth = 10000;   // total width of your level
-    int worldHeight = 600;  // total height of your level
+    int worldHeight = 2000;  // total height of your level
 
     View() = default;
     View(int screenW, int screenH) : screenWidth(screenW), screenHeight(screenH) {}
