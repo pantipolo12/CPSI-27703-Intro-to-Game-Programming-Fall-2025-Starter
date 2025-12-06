@@ -22,7 +22,7 @@ void PhysicsComponent::update(float dt) {
     float newX = body->getX() + body->getVx();
     float newY = body->getY() + body->getVy();
 
-    // 1️⃣ Get all objects in the world
+    //Get all objects in the world
     auto& objects = Engine::E->getObjects();
 
     for (auto& otherObj : objects) {
