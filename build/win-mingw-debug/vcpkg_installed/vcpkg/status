@@ -1,0 +1,217 @@
+Package: vcpkg-cmake-config
+Version: 2024-05-23
+Architecture: x64-mingw-dynamic
+Multi-Arch: same
+Abi: caabee38325458417c7d187d606bb50ca543285fff05fdffa420b3db60493ec7
+Status: install ok installed
+
+Package: vcpkg-cmake
+Version: 2024-04-23
+Architecture: x64-mingw-dynamic
+Multi-Arch: same
+Abi: 45f7a5ccae59332bbeee661c3c9eac3651f65ce2a124b6423f21b06185ff3bb0
+Status: install ok installed
+
+Package: box2d
+Version: 3.1.1
+Depends: vcpkg-cmake, vcpkg-cmake-config
+Architecture: x64-mingw-dynamic
+Multi-Arch: same
+Abi: 3a81dd4ba5ef332d8794346f403bf396e790899bf074fc1c39471a61e300815b
+Description: An open source C++ engine for simulating rigid bodies in 2D
+Status: install ok installed
+
+Package: nlohmann-json
+Version: 3.12.0
+Port-Version: 1
+Depends: vcpkg-cmake, vcpkg-cmake-config
+Architecture: x64-mingw-dynamic
+Multi-Arch: same
+Abi: 599c7694e6db5a6730fa6acbe34304e0c763b558590648c5898db7a3c7d376cd
+Description: JSON for Modern C++
+Status: install ok installed
+
+Package: sdl2
+Version: 2.32.10
+Depends: vcpkg-cmake, vcpkg-cmake-config
+Architecture: x64-mingw-dynamic
+Multi-Arch: same
+Abi: e9d054fae0137d8838cebe8d01eb5cbe1ad165571be975cbddcef703d7095cb9
+Description: Simple DirectMedia Layer is a cross-platform development library designed to provide low level access to audio, keyboard, mouse, joystick, and graphics hardware via OpenGL and Direct3D.
+Status: install ok installed
+
+Package: zlib
+Version: 1.3.1
+Depends: vcpkg-cmake
+Architecture: x64-mingw-dynamic
+Multi-Arch: same
+Abi: 44bc6e1d475da77c419865d3a071f15b0fdcd89a4eed2328c1d92fb034501aaa
+Description: A compression library
+Status: install ok installed
+
+Package: libpng
+Version: 1.6.50
+Depends: vcpkg-cmake, vcpkg-cmake-config, zlib
+Architecture: x64-mingw-dynamic
+Multi-Arch: same
+Abi: 0339633a02672ef8f54ae048475ef61891d839f1db11107e1914a6e03556ce86
+Description: libpng is a library implementing an interface for reading and writing PNG (Portable Network Graphics) format files
+Status: install ok installed
+
+Package: sdl2-image
+Version: 2.8.8
+Port-Version: 2
+Depends: libpng, sdl2, vcpkg-cmake, vcpkg-cmake-config
+Architecture: x64-mingw-dynamic
+Multi-Arch: same
+Abi: 3760e505f451816e2d346553bdc6e883952bcda2043545a996f1bc1c57e1f3af
+Description: SDL_image is an image file loading library. It loads images as SDL surfaces and textures, and supports the following formats: BMP, GIF, JPEG, LBM, PCX, PNG, PNM, TGA, TIFF, WEBP, XCF, XPM, XV
+Status: install ok installed
+
+Package: wavpack
+Version: 5.8.1
+Port-Version: 2
+Depends: vcpkg-cmake, vcpkg-cmake-config
+Architecture: x64-mingw-dynamic
+Multi-Arch: same
+Abi: c95fe0074a3ce7b03acadb5cc55d58bedd44da82b1715ee78a20cf69051d8603
+Description: WavPack encode/decode library, command-line programs, and several plugins
+Status: install ok installed
+
+Package: libogg
+Version: 1.3.6
+Port-Version: 1
+Depends: vcpkg-cmake, vcpkg-cmake-config
+Architecture: x64-mingw-dynamic
+Multi-Arch: same
+Abi: 3cabc80929ad49c03003bfffa6d2cfb098edcdf65b08c0d203cdf88fe81e9699
+Description: Ogg is a multimedia container format, and the native file and stream format for the Xiph.org multimedia codecs.
+Status: install ok installed
+
+Package: libvorbis
+Version: 1.3.7
+Port-Version: 4
+Depends: libogg, vcpkg-cmake, vcpkg-cmake-config
+Architecture: x64-mingw-dynamic
+Multi-Arch: same
+Abi: e7a44e0a2d9268eec88166f7afea4596fa60ae7509572f9e084594eae540cdef
+Description: Ogg Vorbis is a fully open, non-proprietary, patent-and-royalty-free, general-purpose compressed audio format
+Status: install ok installed
+
+Package: sdl2-mixer
+Version: 2.8.1
+Port-Version: 2
+Depends: libvorbis, sdl2, vcpkg-cmake, vcpkg-cmake-config
+Architecture: x64-mingw-dynamic
+Multi-Arch: same
+Abi: 507207a94fadc9c7fb3f777cd75f945edfaac8c800325bfd997c82d47a9aa092
+Description: Multi-channel audio mixer library for SDL.
+Default-Features: wavpack
+Status: install ok installed
+
+Package: sdl2-mixer
+Feature: wavpack
+Depends: wavpack
+Architecture: x64-mingw-dynamic
+Multi-Arch: same
+Description: Enable WavPack music.
+Status: install ok installed
+
+Package: bzip2
+Version: 1.0.8
+Port-Version: 6
+Depends: vcpkg-cmake
+Architecture: x64-mingw-dynamic
+Multi-Arch: same
+Abi: 2cf55f8ee4faae06ccc4bedda3ab4c42719a5baf67f9b94e413d44beffe9448a
+Description: bzip2 is a freely available, patent free, high-quality data compressor. It typically compresses files to within 10% to 15% of the best available techniques (the PPM family of statistical compressors), whilst being around twice as fast at compression and six times faster at decompression.
+Default-Features: tool
+Status: install ok installed
+
+Package: bzip2
+Feature: tool
+Architecture: x64-mingw-dynamic
+Multi-Arch: same
+Description: Builds bzip2 executable
+Status: install ok installed
+
+Package: brotli
+Version: 1.1.0
+Port-Version: 1
+Depends: vcpkg-cmake, vcpkg-cmake-config
+Architecture: x64-mingw-dynamic
+Multi-Arch: same
+Abi: b36dd93e800c6b165cd4ee74b7e6e898c7b7677d28e22761c2d771a130ca0d74
+Description: a generic-purpose lossless compression algorithm that compresses data using a combination of a modern variant of the LZ77 algorithm, Huffman coding and 2nd order context modeling.
+Status: install ok installed
+
+Package: freetype
+Version: 2.13.3
+Depends: vcpkg-cmake, vcpkg-cmake-config
+Architecture: x64-mingw-dynamic
+Multi-Arch: same
+Abi: 55994a37e0fc34be72f16263eedf18406b1be1ad684e5a47c1c7fc387583cba6
+Description: A library to render fonts.
+Default-Features: brotli, bzip2, png, zlib
+Status: install ok installed
+
+Package: freetype
+Feature: brotli
+Depends: brotli
+Architecture: x64-mingw-dynamic
+Multi-Arch: same
+Description: Support decompression of WOFF2 streams
+Status: install ok installed
+
+Package: freetype
+Feature: bzip2
+Depends: bzip2
+Architecture: x64-mingw-dynamic
+Multi-Arch: same
+Description: Support bzip2 compressed fonts.
+Status: install ok installed
+
+Package: freetype
+Feature: png
+Depends: libpng
+Architecture: x64-mingw-dynamic
+Multi-Arch: same
+Description: Support PNG compressed OpenType embedded bitmaps.
+Status: install ok installed
+
+Package: freetype
+Feature: zlib
+Depends: zlib
+Architecture: x64-mingw-dynamic
+Multi-Arch: same
+Description: Use zlib instead of internal library for DEFLATE
+Status: install ok installed
+
+Package: sdl2-ttf
+Version: 2.24.0
+Depends: freetype, sdl2, vcpkg-cmake, vcpkg-cmake-config
+Architecture: x64-mingw-dynamic
+Multi-Arch: same
+Abi: acbd4f06c1b55063b42e6453c9b028ac0cc351e1034b6f837fc1556b30892260
+Description: A library for rendering TrueType fonts with SDL
+Status: install ok installed
+
+Package: tinyxml2
+Version: 11.0.0
+Depends: vcpkg-cmake, vcpkg-cmake-config
+Architecture: x64-mingw-dynamic
+Multi-Arch: same
+Abi: 6f7b21e31263efc20b2fdfe5c361a889cc28aa145910a990c332d23a6808c88b
+Description: A simple, small, efficient, C++ XML parser
+Status: install ok installed
+
+Package: yaml-cpp
+Version: 0.8.0
+Port-Version: 3
+Depends: vcpkg-cmake, vcpkg-cmake-config
+Architecture: x64-mingw-dynamic
+Multi-Arch: same
+Abi: 4e651fb7046a04a9961fae477bf90b11e18c5542700eb344c720e3252a4b181a
+Description: yaml-cpp is a YAML parser and emitter in C++ matching the YAML 1.2 spec.
+Status: install ok installed
+

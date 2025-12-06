@@ -1,0 +1,7 @@
+{
+	"InstallScripts" : 
+	[
+		"C:/CPSI-27703/build/win-mingw-debug/cmake_install.cmake"
+	],
+	"Parallel" : false
+}

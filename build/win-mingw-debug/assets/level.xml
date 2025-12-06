@@ -1,0 +1,97 @@
+<?xml version="1.0"?>
+<Level>
+    <GameObject id="sky">
+         <SpriteComponent image="sky" x="0" y="0" w="1920" h="1080" parallax="0.0"/>
+    </GameObject>
+
+    <GameObject id="clouds">
+        <SpriteComponent image="clouds" x="0" y="50" w="1920" h="300" parallax="0.2"/>
+    </GameObject>
+
+        <GameObject id="layer1">
+        <SpriteComponent image="layer1" x="0" y="300" w="1920" h="500" parallax="0.4"/>
+    </GameObject>
+
+    <GameObject id="layer2">
+        <SpriteComponent image="layer2" x="0" y="400" w="1920" h="600" parallax="0.6"/>
+    </GameObject>
+
+    <GameObject id="layer3">
+        <SpriteComponent image="layer3" x="0" y="450" w="1920" h="650" parallax="0.8"/>
+    </GameObject>
+
+
+    <GameObject id="tree">
+        <BodyComponent x="230" y="750" w="400" h="600" dynamic="false"/>
+        <SpriteComponent image="tree" x="200" y="650" w="400" h="600" />
+    </GameObject>
+
+
+    <GameObject id="playerGIGI">
+        <BodyComponent x="100" y="200" w="50" h="150" dynamic="true" />
+        <SpriteComponent image="playerGIGI" />
+        <AnimateComponent image="playerGIGIwalk" frames="6" time="0.1" />
+        <CharacterComponent />
+    </GameObject> 
+
+
+    <GameObject id="crate">
+        <BodyComponent x="700" y="200" w="150" h="150" dynamic="true" />
+        <SpriteComponent image="crate" />
+    </GameObject>
+
+        <GameObject id="crate1">
+        <BodyComponent x="950" y="200" w="150" h="150" dynamic="true" />
+        <SpriteComponent image="crate" />
+    </GameObject>
+
+            <GameObject id="crate2">
+        <BodyComponent x="800" y="200" w="150" h="150" dynamic="true" />
+        <SpriteComponent image="crate" />
+    </GameObject>
+
+
+    <GameObject id ="rock">
+        <BodyComponent x="700" y="700" w="100" h="100" dynamic="false" />
+        <SpriteComponent image="rock"/>
+    </GameObject>
+
+    <GameObject id="grass">
+        <BodyComponent x="400" y="750" w="750" h="100" dynamic="false" />
+        <SpriteComponent image="grass" />
+        <GroundComponent/>
+    </GameObject>
+
+    <GameObject id="grass1">
+        <BodyComponent x="1200" y="750" w="750" h="100" dynamic="false" />
+        <SpriteComponent image="grass" />
+        <GroundComponent/>
+    </GameObject>
+
+   <GameObject id="grass2">
+        <BodyComponent x="2000" y="775" w="750" h="100" dynamic="false" />
+        <SpriteComponent image="grass" />
+        <GroundComponent/>
+    </GameObject>
+
+    <GameObject id="grass3">
+        <BodyComponent x="2800" y="800" w="750" h="100" dynamic="false" />
+        <SpriteComponent image="grass" />
+        <GroundComponent/>
+    </GameObject>
+
+
+
+    <GameObject id="bee">
+        <BodyComponent x="100" y="100" w="100" h="100" dynamic="true"/>
+        <SpriteComponent image="bee" />
+        <MissileComponent target="playerGIGI" />
+    </GameObject>
+
+
+    <GameObject id="tree1">
+        <SpriteComponent image="tree" />
+    </GameObject>
+</Level>
+
+

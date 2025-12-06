@@ -1,0 +1,24 @@
+# ninja log v7
+22	391	7867242355307541	CMakeFiles/demo.dir/src/Component.cpp.obj	5a4a83d92922208f
+13	1076	7867242355224425	CMakeFiles/demo.dir/src/InputDevice.cpp.obj	2f4232073dfd344c
+16	1186	7867242355244371	CMakeFiles/demo.dir/src/BodyComponent.cpp.obj	350538acb49f566f
+7	1214	7867242355154608	CMakeFiles/demo.dir/src/Object.cpp.obj	a4c3ae791559877b
+24	1315	7867242355337464	CMakeFiles/demo.dir/src/MissileComponent.cpp.obj	2e0c17da2f7689e1
+28	1354	7867242355367378	CMakeFiles/demo.dir/src/BounceComponent.cpp.obj	22b39b6adf2f1079
+4	1362	7867242355134661	CMakeFiles/demo.dir/src/main.cpp.obj	f1c2abbdb6f831d4
+31	1367	7867242355397302	CMakeFiles/demo.dir/src/PhysicsComponent.cpp.obj	f4f34e4f4cf8a5f9
+43	1372	7867242355516980	CMakeFiles/demo.dir/src/AnimateComponent.cpp.obj	cfe11c7c1a96fc7
+19	1383	7867242355277628	CMakeFiles/demo.dir/src/SpriteComponent.cpp.obj	603a7737f199a45c
+11	1385	7867242355204473	CMakeFiles/demo.dir/src/ImageDevice.cpp.obj	9a6050e015baad26
+33	1421	7867242355417253	CMakeFiles/demo.dir/src/CharacterComponent.cpp.obj	b0971f5f57673c2
+36	1641	7867242355447167	CMakeFiles/demo.dir/src/LevelLoader.cpp.obj	5c3207ef24f65950
+9	1728	7867242355184525	CMakeFiles/demo.dir/src/Engine.cpp.obj	79d896b6ef6d8de2
+1728	4575	7867242372367904	demo.exe	a076c83845b568e9
+33	951	7867268939543363	CMakeFiles/demo.dir/src/MissileComponent.cpp.obj	2e0c17da2f7689e1
+26	1017	7867268939468480	CMakeFiles/demo.dir/src/main.cpp.obj	f1c2abbdb6f831d4
+31	1022	7867268939515172	CMakeFiles/demo.dir/src/SpriteComponent.cpp.obj	603a7737f199a45c
+35	1245	7867268939563312	CMakeFiles/demo.dir/src/LevelLoader.cpp.obj	5c3207ef24f65950
+29	1341	7867268939495283	CMakeFiles/demo.dir/src/Engine.cpp.obj	79d896b6ef6d8de2
+1341	4216	7867268952602832	demo.exe	a076c83845b568e9
+9	983	7867269781332022	CMakeFiles/demo.dir/src/LevelLoader.cpp.obj	5c3207ef24f65950
+984	3507	7867269791070552	demo.exe	a076c83845b568e9
