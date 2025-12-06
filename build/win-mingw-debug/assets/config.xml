@@ -1,1 +1,0 @@
-<DemoConfig title="Hello SDL2 + Box2D + tinyxml2" gravityY="9.8" spawnRate="3000.0" boxSize=".1" />
