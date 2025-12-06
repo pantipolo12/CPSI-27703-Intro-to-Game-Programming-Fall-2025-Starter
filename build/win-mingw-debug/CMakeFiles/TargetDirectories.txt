@@ -1,0 +1,3 @@
+C:/CPSI-27703/build/win-mingw-debug/CMakeFiles/demo.dir
+C:/CPSI-27703/build/win-mingw-debug/CMakeFiles/edit_cache.dir
+C:/CPSI-27703/build/win-mingw-debug/CMakeFiles/rebuild_cache.dir

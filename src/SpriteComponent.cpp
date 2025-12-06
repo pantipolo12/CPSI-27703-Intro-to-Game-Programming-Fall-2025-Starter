@@ -1,7 +1,9 @@
 #include "SpriteComponent.h"
 #include "BodyComponent.h"
+#include "CharacterComponent.h"
 #include "ImageDevice.h"
 #include "Engine.h"
+#include <box2d/box2d.h>
 #include <iostream>
 
 SpriteComponent::SpriteComponent(const std::string& textureName) 
@@ -83,7 +85,24 @@ void SpriteComponent::draw(SDL_RendererFlip flip) {
         screenRect = Engine::E->getView().transform(worldRect);
     }
 
-    SDL_RenderCopyEx(renderer, tex, nullptr, &screenRect, 0.0, nullptr, flip);
+    // Get rotation from BodyComponent for physics-based objects (like crates)
+    float rotation = 0.0f;
+    if (body) {
+        // Check if this is a dynamic body that should rotate (crates, etc.)
+        // Skip rotation for player (objects with CharacterComponent)
+        bool isPlayer = getObject()->getComponent<CharacterComponent>() != nullptr;
+        if (!isPlayer) {
+            b2BodyId bodyId = body->getBody();
+            if (B2_IS_NON_NULL(bodyId)) {
+                b2BodyType bodyType = b2Body_GetType(bodyId);
+                if (bodyType == b2_dynamicBody) {
+                    rotation = body->getAngle(); // Use Box2D rotation for dynamic objects
+                }
+            }
+        }
+    }
+
+    SDL_RenderCopyEx(renderer, tex, nullptr, &screenRect, rotation, nullptr, flip);
 }
 
 void SpriteComponent::render() {
