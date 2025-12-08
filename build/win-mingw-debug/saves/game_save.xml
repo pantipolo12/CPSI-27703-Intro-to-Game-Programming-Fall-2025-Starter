@@ -1,0 +1,74 @@
+<SaveGame>
+    <Metadata timestamp="2025-12-08 03:03:54" version="1.0"/>
+    <World width="5000" height="1200"/>
+    <Objects>
+        <GameObject id="object_0">
+            <SpriteComponent image="sky" x="0" y="0" w="1920" h="1080" parallax="0"/>
+        </GameObject>
+        <GameObject id="object_1">
+            <SpriteComponent image="clouds" x="0" y="50" w="1920" h="300" parallax="0.2"/>
+        </GameObject>
+        <GameObject id="object_2">
+            <SpriteComponent image="layer1" x="0" y="300" w="1920" h="500" parallax="0.40000001"/>
+        </GameObject>
+        <GameObject id="object_3">
+            <SpriteComponent image="layer2" x="0" y="400" w="1920" h="600" parallax="0.60000002"/>
+        </GameObject>
+        <GameObject id="object_4">
+            <SpriteComponent image="layer3" x="0" y="450" w="1920" h="650" parallax="0.80000001"/>
+        </GameObject>
+        <GameObject id="object_5">
+            <BodyComponent x="230" y="750" w="400" h="600" vx="0" vy="-0" angle="0"/>
+            <SpriteComponent image="tree" x="200" y="650" w="400" h="600" parallax="1"/>
+        </GameObject>
+        <GameObject id="playerGIGI">
+            <BodyComponent x="100" y="260.95837" w="64" h="64" vx="0" vy="220.0002" angle="0"/>
+            <SpriteComponent image="playerGIGIIdle" x="0" y="0" w="0" h="0" parallax="1"/>
+            <CharacterComponent/>
+            <AnimateComponent image="playerGIGIIdle"/>
+        </GameObject>
+        <GameObject id="object_6">
+            <BodyComponent x="699.1828" y="260.95715" w="150" h="150" vx="-0.5265047" vy="220.00572" angle="0.044194844"/>
+            <SpriteComponent image="crate" x="0" y="0" w="0" h="0" parallax="1"/>
+        </GameObject>
+        <GameObject id="object_7">
+            <BodyComponent x="950.39966" y="260.96973" w="150" h="150" vx="0.31348827" vy="219.9751" angle="-0.0038686013"/>
+            <SpriteComponent image="crate" x="0" y="0" w="0" h="0" parallax="1"/>
+        </GameObject>
+        <GameObject id="object_8">
+            <BodyComponent x="800.4176" y="260.94824" w="150" h="150" vx="0.21301664" vy="220.01979" angle="-0.012526991"/>
+            <SpriteComponent image="crate" x="0" y="0" w="0" h="0" parallax="1"/>
+        </GameObject>
+        <GameObject id="object_9">
+            <BodyComponent x="700" y="700" w="100" h="100" vx="0" vy="-0" angle="0"/>
+            <SpriteComponent image="rock" x="0" y="0" w="0" h="0" parallax="1"/>
+        </GameObject>
+        <GameObject id="ground_10">
+            <BodyComponent x="400" y="750" w="750" h="100" vx="0" vy="-0" angle="0"/>
+            <SpriteComponent image="grass" x="0" y="0" w="0" h="0" parallax="1"/>
+            <GroundComponent/>
+        </GameObject>
+        <GameObject id="ground_11">
+            <BodyComponent x="1200" y="750" w="750" h="100" vx="0" vy="-0" angle="0"/>
+            <SpriteComponent image="grass" x="0" y="0" w="0" h="0" parallax="1"/>
+            <GroundComponent/>
+        </GameObject>
+        <GameObject id="ground_12">
+            <BodyComponent x="2000" y="775" w="750" h="100" vx="0" vy="-0" angle="0"/>
+            <SpriteComponent image="grass" x="0" y="0" w="0" h="0" parallax="1"/>
+            <GroundComponent/>
+        </GameObject>
+        <GameObject id="ground_13">
+            <BodyComponent x="2800" y="800" w="750" h="100" vx="0" vy="-0" angle="0"/>
+            <SpriteComponent image="grass" x="0" y="0" w="0" h="0" parallax="1"/>
+            <GroundComponent/>
+        </GameObject>
+        <GameObject id="object_14">
+            <BodyComponent x="100" y="182.29211" w="64" h="64" vx="0" vy="150" angle="90"/>
+            <SpriteComponent image="bee" x="0" y="0" w="0" h="0" parallax="1"/>
+        </GameObject>
+        <GameObject id="object_15">
+            <SpriteComponent image="tree" x="0" y="0" w="0" h="0" parallax="1"/>
+        </GameObject>
+    </Objects>
+</SaveGame>
