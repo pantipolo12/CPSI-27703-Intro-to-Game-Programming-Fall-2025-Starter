@@ -41,11 +41,16 @@ add_executable(
     src/CharacterComponent.cpp
     src/View.h
     src/ControlerComponent.h
+    src/Timer.h
     src/LevelLoader.h
     src/LevelLoader.cpp
+    src/SaveGame.h
+    src/SaveGame.cpp
     src/SolidComponent.h
     src/AnimateComponent.h
     src/AnimateComponent.cpp
+    src/Menu.h
+    src/Menu.cpp
 )
 
 # Link libraries

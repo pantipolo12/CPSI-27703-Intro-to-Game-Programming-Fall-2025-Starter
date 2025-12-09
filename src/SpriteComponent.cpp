@@ -27,11 +27,11 @@ SpriteComponent::SpriteComponent(int r, int g, int b) {
     }
 }
 
-// ********** ADD THIS MISSING FUNCTION **********
+
 void SpriteComponent::draw() {
     draw(SDL_FLIP_NONE);
 }
-// ***********************************************
+
 
 void SpriteComponent::draw(SDL_RendererFlip flip) {
     SDL_Renderer* renderer = Engine::E->getRenderer();
@@ -64,7 +64,6 @@ void SpriteComponent::draw(SDL_RendererFlip flip) {
     SDL_Rect screenRect;
 
     if (screenSpace) {
-        // --- PARALLAX LOGIC ---
         // Parallax: 0.0 = no movement (sky), 1.0 = full movement (foreground)
         // Lower parallax values move slower (background layers)
         float camX = Engine::E->getView().x;
@@ -73,6 +72,29 @@ void SpriteComponent::draw(SDL_RendererFlip flip) {
         // Calculate parallax offset - background layers move slower than camera
         float parallaxOffsetX = camX * parallaxFactor;
         float parallaxOffsetY = camY * parallaxFactor;
+        
+        // Bidirectional infinite scrolling for backgrounds
+        if (!body && worldRect.w > 0) {
+            float viewRight = Engine::E->getView().screenWidth;
+            float screenLeft = worldRect.x - parallaxOffsetX;
+            float screenRight = (worldRect.x + worldRect.w) - parallaxOffsetX;
+            
+            // Scrolling right: when sprite's right edge reaches view's right edge
+            if (screenRight <= viewRight && parallaxOffsetX > lastParallaxOffsetX) {
+                // Reset sprite's world position so its left edge aligns with view's left edge (screen x = 0)
+                spriteX = parallaxOffsetX;
+                worldRect.x = spriteX;
+            }
+            // Scrolling left: when sprite's left edge reaches or passes view's left edge
+            else if (screenLeft >= 0 && parallaxOffsetX < lastParallaxOffsetX) {
+                // Reset sprite's world position so its right edge aligns with view's right edge
+                spriteX = parallaxOffsetX + viewRight - worldRect.w;
+                worldRect.x = spriteX;
+            }
+            
+            // Update last parallax offset for next frame (track scrolling direction)
+            lastParallaxOffsetX = parallaxOffsetX;
+        }
         
         // Apply parallax to world position
         screenRect.x = int(worldRect.x - parallaxOffsetX);
@@ -107,7 +129,7 @@ void SpriteComponent::draw(SDL_RendererFlip flip) {
 
 void SpriteComponent::render() {
     if (!isEnabled) return; // Don't render if disabled
-    draw();
+    draw(flip); // Use stored flip state
 }
 
 void SpriteComponent::setParallax(float factor)

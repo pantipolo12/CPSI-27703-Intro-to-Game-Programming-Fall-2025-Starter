@@ -29,14 +29,26 @@ public:
     void setWidth(float w) { width = w; }
     void setHeight(float h) { height = h; }
     
+    // Position and size getters
+    float getX() const { return spriteX; }
+    float getY() const { return spriteY; }
+    float getWidth() const { return width; }
+    float getHeight() const { return height; }
+    float getParallax() const { return parallaxFactor; }
+    
     // Enable/disable rendering (useful when AnimateComponent is active)
     void setEnabled(bool enabled) { isEnabled = enabled; }
     bool getEnabled() const { return isEnabled; }
+    
+    // Flip support
+    void setFlip(SDL_RendererFlip flip) { this->flip = flip; }
+    SDL_RendererFlip getFlip() const { return flip; }
 
     SDL_Texture* getTexture() const { return texture;}
 private:
     bool screenSpace = false;   // does NOT use the camera transform
     bool isEnabled = true;      // Enable/disable rendering
+    SDL_RendererFlip flip = SDL_FLIP_NONE; // Flip state
     std::string textureName;
     SDL_Texture* texture = nullptr;
     float spriteX = 0;
@@ -44,5 +56,6 @@ float spriteY = 0;
 float width = 0;
 float height = 0;
 float parallaxFactor = 1.0f; // 1 = normal, <1 = slow background, >1 = fast foreground 
+float lastParallaxOffsetX = 0.0f; // Track previous parallax offset for bidirectional scrolling
 
 };

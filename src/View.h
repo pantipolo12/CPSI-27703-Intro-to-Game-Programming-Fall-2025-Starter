@@ -29,7 +29,7 @@ public:
     // Center camera on a point (px, py), with optional clamping
     void centerOn(float px, float py) {
         x = px - screenWidth / 2.0f;
-        y = py - screenHeight / 2.0f;
+        y = py - screenHeight / 2.0f-240.0f;
 
         // Clamp to world bounds
         if (x < 0) x = 0;

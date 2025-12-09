@@ -37,14 +37,22 @@ void CharacterComponent::update(float dt) {
     float playerBottom = py + ph / 2;
 
     // --- Check if on ground ---
+    // Player can stand on objects with GroundComponent OR any solid object (like crates)
     bool onGround = false;
+    Object* standingOnObject = nullptr;
 
     for (auto& obj : Engine::E->getObjects()) {
-        auto ground = obj->getComponent<GroundComponent>();
-        if (!ground) continue;
+        // Skip the player itself
+        if (obj.get() == getObject()) continue;
 
         auto* gBody = obj->getComponent<BodyComponent>();
         if (!gBody) continue;
+
+        // Check if this object has GroundComponent OR is a solid object (like a crate)
+        auto ground = obj->getComponent<GroundComponent>();
+        bool isSolidObject = (ground != nullptr) || (gBody != nullptr); // Any object with BodyComponent can be stood on
+        
+        if (!isSolidObject) continue;
 
         float gx = gBody->getX();
         float gy = gBody->getY();
@@ -63,22 +71,30 @@ void CharacterComponent::update(float dt) {
         float distanceToGround = playerBottom - groundTop;
 
         // Check if player is on or very close to ground
-        if (overlapX && distanceToGround >= -groundCheckDistance && distanceToGround <= groundCheckDistance && vy >= -0.5f) {
-            onGround = true;
-            
-            // If player has penetrated ground or is very close, snap to ground surface
-            // Player bottom should be exactly at ground top (not sinking)
-            if (distanceToGround > -2.0f && distanceToGround < 10.0f) {
-                // Set player center so that player bottom = ground top
-                // playerBottom = py + ph/2 = groundTop
-                // Therefore: py = groundTop - ph/2
-                float targetY = groundTop - ph / 2;
-                float currentY = body->getY();
+        // For crates and other objects, we need to be more lenient with the distance check
+        float checkDistance = ground ? groundCheckDistance : groundCheckDistance * 1.5f; // More lenient for non-ground objects
+        
+        if (overlapX && distanceToGround >= -checkDistance && distanceToGround <= checkDistance && vy >= -0.5f) {
+            // Make sure the object is actually below the player (player's bottom is near object's top)
+            if (playerBottom >= groundTop - 5.0f && playerBottom <= groundTop + checkDistance) {
+                onGround = true;
+                standingOnObject = obj.get();
                 
-                // Only adjust if we're actually penetrating or very close
-                if (std::abs(currentY - targetY) > 1.0f) {
-                    body->setY(targetY);
-                    body->setVy(0);
+                // If player has penetrated ground or is very close, snap to ground surface
+                // Player bottom should be exactly at ground top (not sinking)
+                // Only do this for GroundComponent objects to avoid interfering with crate physics
+                if (ground && distanceToGround > -2.0f && distanceToGround < 10.0f) {
+                    // Set player center so that player bottom = ground top
+                    // playerBottom = py + ph/2 = groundTop
+                    // Therefore: py = groundTop - ph/2
+                    float targetY = groundTop - ph / 2;
+                    float currentY = body->getY();
+                    
+                    // Only adjust if we're actually penetrating or very close
+                    if (std::abs(currentY - targetY) > 1.0f) {
+                        body->setY(targetY);
+                        body->setVy(0);
+                    }
                 }
             }
         }
@@ -117,22 +133,35 @@ void CharacterComponent::update(float dt) {
     // Check if player is moving horizontally
     bool isMoving = std::abs(newVx) > 0.1f;
     
+    // Update flip state based on input (not just movement)
+    // This way the flip persists even when player stops
+    if (leftPressed) {
+        lastFlip = SDL_FLIP_HORIZONTAL; // Facing left
+    } else if (rightPressed) {
+        lastFlip = SDL_FLIP_NONE; // Facing right
+    }
+    // If neither key is pressed, keep the last flip state (don't reset it)
+    
     if (animate && sprite) {
+        // Always apply the flip state to both components
+        animate->setFlip(lastFlip);
+        sprite->setFlip(lastFlip);
+        
         if (isMoving) {
-            // Enable animation, disable static sprite
+            // Walking: switch to walk animation
+            if (animate->getTextureName() != "playerGIGIwalk6") {
+                animate->setTexture("playerGIGIwalk6", 6, 64, 64, 10);
+            }
             animate->setEnabled(true);
             sprite->setEnabled(false);
-            
-            // Set flip based on direction
-            if (newVx < 0) {
-                animate->setFlip(SDL_FLIP_HORIZONTAL); // Moving left
-            } else if (newVx > 0) {
-                animate->setFlip(SDL_FLIP_NONE); // Moving right
-            }
         } else {
-            // Disable animation, enable static sprite
-            animate->setEnabled(false);
-            sprite->setEnabled(true);
+            // Idle: switch to idle animation
+            if (animate->getTextureName() != "playerGIGIIdle") {
+                animate->setTexture("playerGIGIIdle", 6, 64, 64, 10);
+            }
+            // Always enable animation when idle (it should be animating)
+            animate->setEnabled(true);
+            sprite->setEnabled(false);
         }
     }
 
@@ -171,26 +200,3 @@ void CharacterComponent::update(float dt) {
               << ")  Velocity: (" << body->getVx() << ", " << body->getVy()
               << ")  OnGround: " << (onGround ? "Yes" : "No") << "\n";
 }
-
-// void CharacterComponent::drawDebug(SDL_Renderer* renderer) {
-//             auto*  body = getObject()->getComponent<BodyComponent>();
-//             if(!body) return;
-
-//             //character
-//             SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
-//             SDL_Rect charRect = body->getRect();
-//             SDL_RenderDrawRect(renderer, &charRect);
-
-//             //ground
-//             for (auto* obj : Engine::E->getObjects())
-//             {
-//                 auto* gBody = obj->getComponent<BodyComponent>();
-//                 auto* ground = obj->getComponent<GroundComponent>();
-//                 if(!gBody || !ground) continue;
-
-//                 SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
-//                 SDL_Rect groundRect = gBody->getRect();
-//                 SDL_RenderDrawRect(renderer, &groundRect);
-//             }
-
-//     }

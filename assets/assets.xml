@@ -7,9 +7,16 @@
     <Texture name="background" file="assets/backgroundSky.png" />
     <Texture name="bee" file="assets/bee.png" />
     <Texture name="playerGIGIwalk" file="assets/playerGIGIwalk.png" />
+    <Texture name="playerGIGIIdle" file="assets/playerGIGIIdle.png" />
+    <Texture name="playerGIGIwalk6" file="assets/playerGIGIwalk6.png" />
     <Texture name="sky" file="assets/background/Sky.png" />
     <Texture name="clouds" file="assets/background/Clouds.png" />
     <Texture name="layer3" file="assets/background/BGLayer3.png" />
     <Texture name="layer2" file="assets/background/BGLayer2.png" />
     <Texture name="layer1" file="assets/background/BGLayer1.png" />
+    <Texture name="maskdude_idle" file="assets/Mask_Dude/Idle (32x32).png" />
+    <Texture name="maskdude_run" file="assets/Mask_Dude/Run (32x32).png" />
+    <Texture name="maskdude_hit" file="assets/Mask_Dude/Hit (32x32).png" />
+    <Texture name="maskdude_jump" file="assets/Mask_Dude/Jump (32x32).png" />
+    <Texture name="maskdude_fall" file="assets/Mask_Dude/Fall (32x32).png" />
 </Assets>

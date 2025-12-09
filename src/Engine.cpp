@@ -26,6 +26,8 @@ Engine::Engine() {
     renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
     E = this;
     
+
+    
     // Create Box2D world
     // Box2D uses Y-up coordinate system internally
     // We convert coordinates at the BodyComponent interface
@@ -86,7 +88,7 @@ void Engine::processInput() {
 void Engine::updateObjects() {
     // Update all objects
     for (auto& obj : objects) 
-        obj->update(dt); 
+        obj->update(this->dt); 
         
 }
 

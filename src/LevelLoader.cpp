@@ -70,7 +70,7 @@ bool LevelLoader::load(const std::string& filename, Engine& engine)
                 } else {
                     // If not set, check if it's player or bee (they should be dynamic)
                     std::string objId = objElem->Attribute("id") ? objElem->Attribute("id") : "";
-                    isDynamic = (objId == "playerGIGI" || objId == "bee");
+                    isDynamic = (objId == "playerGIGI" || objId == "fish");
                 }
                 
                 obj->addComponent<BodyComponent>(world, x, y, w, h, isDynamic, worldHeight);
@@ -111,9 +111,16 @@ bool LevelLoader::load(const std::string& filename, Engine& engine)
                 if (image) {
                     int frames = comp->IntAttribute("frames", 1);
                     float time = comp->FloatAttribute("time", 0.1f);
-                    obj->addComponent<AnimateComponent>(image, frames, time);
+
+                    // obj->addComponent<AnimateComponent>(image, frames, time);
+                    
+                    int frameWidth = comp->IntAttribute("frameWidth", 0);
+                    int frameHeight = comp->IntAttribute("frameHeight", 0);
+                    int frameSpacing = comp->IntAttribute("frameSpacing", 0);
+                    obj->addComponent<AnimateComponent>(image, frames, time, frameWidth, frameHeight, frameSpacing);
                 }
             }
+
         }
 
         if (std::string(id) == "playerGIGI")
