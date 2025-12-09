@@ -12,6 +12,12 @@
 #include "CharacterComponent.h"
 #include "SpriteComponent.h"
 #include "GroundComponent.h"
+#include "LevelLoader.h"
+#include "KeyComponent.h"
+#include "DoorComponent.h"
+#include "HealthComponent.h"
+#include "MissileComponent.h"
+#include "ImageDevice.h"
 
 Engine* Engine::E = nullptr;
 
@@ -61,6 +67,9 @@ void Engine::update() {
         const float timeStep = 1.0f / 60.0f;  // Fixed timestep at 60 FPS
         const int subStepCount = 4;
         b2World_Step(worldId, timeStep, subStepCount);
+        
+        // Process contact events after physics step
+        processContactEvents();
     }
     
     updateObjects();
@@ -149,6 +158,7 @@ void Engine::render()
     // Optional: draw the ground line
     drawRect(0, groundY, view.worldWidth, 2, 0, 255, 0);
 
+    // Note: Health UI and Game Over are rendered in main.cpp's render loop
     // Present the final frame
     SDL_RenderPresent(renderer);
 }
@@ -257,6 +267,16 @@ Object* Engine::findObjectById(const std::string& id)
 void Engine::update(float dt) {
     this->dt = dt;
     
+    // Check if a level load was queued (do this first, before any updates)
+    if (hasQueuedLevel) {
+        std::string levelToLoad = queuedLevelPath;
+        hasQueuedLevel = false;
+        queuedLevelPath.clear();
+        std::cout << "[ENGINE] Processing queued level load: " << levelToLoad << std::endl;
+        loadLevel(levelToLoad);
+        return; // Don't update this frame, let the new level initialize
+    }
+    
     // Step physics world with variable timestep
     if (B2_IS_NON_NULL(worldId)) {
         const int subStepCount = 4;
@@ -286,11 +306,29 @@ void Engine::update(float dt) {
             [](const AABBQueryVisual& a) { return a.lifetime <= 0; }),
         aabbQueryVisuals.end());
     
+    // Manual bee collision check (runs every frame to ensure collisions are detected)
+    // Only check if player is alive
+    if (player) {
+        HealthComponent* health = player->getComponent<HealthComponent>();
+        if (health && !health->isDead()) {
+            checkBeeCollisions();
+        }
+    }
+    
     for(auto& obj : getObjects()) {
         if (auto* charComp = obj->getComponent<CharacterComponent>()) {
             charComp->update(dt);
         }
-        // other updates
+        // Update KeyComponent and DoorComponent
+        if (auto* keyComp = obj->getComponent<KeyComponent>()) {
+            keyComp->update(dt);
+        }
+        if (auto* doorComp = obj->getComponent<DoorComponent>()) {
+            doorComp->update(dt);
+        }
+        if (auto* healthComp = obj->getComponent<HealthComponent>()) {
+            healthComp->update(dt);
+        }
     }
 }
 
@@ -419,9 +457,91 @@ Engine::AABBQueryResult Engine::queryAABB(float x, float y, float width, float h
     return result;
 }
 
+// Manual collision check for bees (backup to contact events)
+// Player dies after 3 bee collisions (health starts at 3, each collision does 1 damage)
+void Engine::checkBeeCollisions() {
+    if (!player) return;
+    
+    BodyComponent* playerBody = player->getComponent<BodyComponent>();
+    if (!playerBody) return;
+    
+    HealthComponent* health = player->getComponent<HealthComponent>();
+    if (!health) {
+        std::cout << "[BEE COLLISION] WARNING: Player has no HealthComponent!" << std::endl;
+        return;
+    }
+    if (health->isDead()) {
+        // Player is already dead, don't check collisions
+        return;
+    }
+    
+    float playerX = playerBody->getX();
+    float playerY = playerBody->getY();
+    float playerW = playerBody->getWidth();
+    float playerH = playerBody->getHeight();
+    
+    float playerLeft = playerX - playerW / 2;
+    float playerRight = playerX + playerW / 2;
+    float playerTop = playerY - playerH / 2;
+    float playerBottom = playerY + playerH / 2;
+    
+    // Check all objects for bees
+    for (auto& obj : objects) {
+        if (obj.get() == player) continue;
+        
+        // Check if this is a bee
+        bool isBee = (obj->getComponent<MissileComponent>() != nullptr) || 
+                      (obj->getId().find("bee") != std::string::npos);
+        
+        if (isBee) {
+            BodyComponent* beeBody = obj->getComponent<BodyComponent>();
+            if (beeBody) {
+                float beeX = beeBody->getX();
+                float beeY = beeBody->getY();
+                float beeW = beeBody->getWidth();
+                float beeH = beeBody->getHeight();
+                
+                float beeLeft = beeX - beeW / 2;
+                float beeRight = beeX + beeW / 2;
+                float beeTop = beeY - beeH / 2;
+                float beeBottom = beeY + beeH / 2;
+                
+                // Check for overlap
+                bool overlapX = (playerRight > beeLeft) && (playerLeft < beeRight);
+                bool overlapY = (playerBottom > beeTop) && (playerTop < beeBottom);
+                
+                if (overlapX && overlapY) {
+                    // Manual collision detected
+                    const float BEE_DAMAGE_COOLDOWN = 1.0f; // 1 second cooldown
+                    float currentTime = SDL_GetTicks() / 1000.0f;
+                    
+                    auto it = beeDamageCooldown.find(obj.get());
+                    bool onCooldown = (it != beeDamageCooldown.end() && currentTime < it->second);
+                    
+                    if (!onCooldown) {
+                        int healthBefore = health->getHealth();
+                        
+                        // Apply damage - this will check invulnerability internally
+                        health->takeDamage(1);
+                        int healthAfter = health->getHealth();
+                        
+                        // Always set cooldown to prevent spam (even if damage was blocked by invulnerability)
+                        beeDamageCooldown[obj.get()] = currentTime + BEE_DAMAGE_COOLDOWN;
+                        
+                        // Check if player died
+                        if (health->isDead()) {
+                            std::cout << "[GAME OVER] *** PLAYER DIED AFTER " << (3 - healthAfter) << " BEE COLLISIONS! ***" << std::endl;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
 // Contact event processing
 void Engine::processContactEvents() {
-    if (!B2_IS_NON_NULL(worldId)) return;
+    if (!B2_IS_NON_NULL(worldId) || !player) return;
     
     b2ContactEvents events = b2World_GetContactEvents(worldId);
     
@@ -440,7 +560,53 @@ void Engine::processContactEvents() {
             Object* objA = static_cast<Object*>(userDataA);
             Object* objB = static_cast<Object*>(userDataB);
             
-            std::cout << "[CONTACT BEGIN] " << objA->getId() << " collided with " << objB->getId() << std::endl;
+            // Check if player was hit by bee
+            Object* playerObj = player;
+            Object* beeObj = nullptr;
+            
+            if (objA == playerObj || objB == playerObj) {
+                Object* otherObj = (objA == playerObj) ? objB : objA;
+                // Check if other object is a bee (has MissileComponent or id contains "bee")
+                if (otherObj->getComponent<MissileComponent>() || 
+                    otherObj->getId().find("bee") != std::string::npos) {
+                    beeObj = otherObj;
+                }
+            }
+            
+            if (beeObj && playerObj) {
+                HealthComponent* health = playerObj->getComponent<HealthComponent>();
+                if (health && !health->isDead()) {
+                    // Check if this bee has recently damaged the player (cooldown to prevent multiple hits)
+                    const float BEE_DAMAGE_COOLDOWN = 1.0f; // 1 second cooldown per bee (matches invulnerability)
+                    float currentTime = SDL_GetTicks() / 1000.0f; // Convert to seconds
+                    
+                    // Check cooldown
+                    auto it = beeDamageCooldown.find(beeObj);
+                    bool onCooldown = (it != beeDamageCooldown.end() && currentTime < it->second);
+                    
+                    if (!onCooldown) {
+                        // Apply damage (HealthComponent will check its own invulnerability)
+                        int healthBefore = health->getHealth();
+                        
+                        health->takeDamage(1);
+                        int healthAfter = health->getHealth();
+                        
+                        // Always set cooldown to prevent spam
+                        beeDamageCooldown[beeObj] = currentTime + BEE_DAMAGE_COOLDOWN;
+                        
+                        // Log if damage was actually applied
+                        if (healthBefore != healthAfter) {
+                            std::cout << "[DAMAGE] Player hit by bee (" << beeObj->getId() << ")! Health: " 
+                                      << healthAfter << "/" << health->getMaxHealth() << std::endl;
+                            
+                            // Check if player is dead
+                            if (health->isDead()) {
+                                std::cout << "[GAME OVER] *** PLAYER IS DEAD! ***" << std::endl;
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
     
@@ -519,6 +685,151 @@ void Engine::removeObjectById(const std::string& id) {
     if (obj) {
         removeObject(obj);
     }
+}
+
+void Engine::queueLevelLoad(const std::string& levelPath) {
+    queuedLevelPath = levelPath;
+    hasQueuedLevel = true;
+    std::cout << "[ENGINE] Level load queued: " << levelPath << std::endl;
+}
+
+void Engine::loadLevel(const std::string& levelPath) {
+    std::cout << "[ENGINE] ========================================" << std::endl;
+    std::cout << "[ENGINE] Loading level: " << levelPath << std::endl;
+    
+    // Clear bee damage cooldowns first
+    beeDamageCooldown.clear();
+    
+    // Clear all current objects (this will destroy their bodies via destructors)
+    // Important: Clear objects before loading new ones to avoid conflicts
+    int oldObjectCount = objects.size();
+    objects.clear();
+    player = nullptr;
+    std::cout << "[ENGINE] Cleared " << oldObjectCount << " old objects" << std::endl;
+    
+    // Load the new level
+    if (LevelLoader::load(levelPath, *this)) {
+        // Set world size (you may want to make this configurable per level)
+        setWorldSize(5000, 1200);
+        std::cout << "[ENGINE] Level loaded successfully: " << levelPath << std::endl;
+        std::cout << "[ENGINE] New object count: " << objects.size() << std::endl;
+        
+        // Reset view to center on player if player exists
+        if (player) {
+            BodyComponent* playerBody = player->getComponent<BodyComponent>();
+            if (playerBody) {
+                float playerX = playerBody->getX();
+                float playerY = playerBody->getY();
+                updateView(player);
+                std::cout << "[ENGINE] View updated to player position: (" << playerX << ", " << playerY << ")" << std::endl;
+                
+                // Verify health component
+                HealthComponent* health = player->getComponent<HealthComponent>();
+                if (health) {
+                    std::cout << "[ENGINE] Player health: " << health->getHealth() << "/" << health->getMaxHealth() << std::endl;
+                } else {
+                    std::cout << "[ENGINE] WARNING: Player has no HealthComponent!" << std::endl;
+                }
+            }
+        } else {
+            std::cout << "[ENGINE] WARNING: No player found after level load!" << std::endl;
+        }
+        std::cout << "[ENGINE] ========================================" << std::endl;
+    } else {
+        std::cerr << "[ENGINE] ERROR: Failed to load level: " << levelPath << std::endl;
+        std::cerr << "[ENGINE] ========================================" << std::endl;
+    }
+}
+
+void Engine::renderHealthUI() {
+    if (!player) return;
+    
+    HealthComponent* health = player->getComponent<HealthComponent>();
+    if (!health) return;
+    
+    int currentHealth = health->getHealth();
+    int maxHealth = health->getMaxHealth();
+    
+    // Heart size
+    const int heartSize = 32;
+    const int heartSpacing = 5;
+    const int startX = 20;
+    const int startY = 50;
+    
+    SDL_Texture* heartTex = ImageDevice::get("heart");
+    if (!heartTex) return;
+    
+    // Draw hearts (screen space, not affected by camera)
+    // Reset texture color mod first to ensure clean state
+    SDL_SetTextureColorMod(heartTex, 255, 255, 255);
+    
+    for (int i = 0; i < maxHealth; i++) {
+        SDL_Rect heartRect;
+        heartRect.x = startX + i * (heartSize + heartSpacing);
+        heartRect.y = startY;
+        heartRect.w = heartSize;
+        heartRect.h = heartSize;
+        
+        // Draw filled heart if player has this life, otherwise draw empty/dark
+        if (i < currentHealth) {
+            // Full color heart
+            SDL_SetTextureColorMod(heartTex, 255, 255, 255);
+            SDL_RenderCopy(renderer, heartTex, nullptr, &heartRect);
+        } else {
+            // Draw darkened heart
+            SDL_SetTextureColorMod(heartTex, 100, 100, 100); // Darken
+            SDL_RenderCopy(renderer, heartTex, nullptr, &heartRect);
+        }
+    }
+    
+    // Reset texture color mod after rendering
+    SDL_SetTextureColorMod(heartTex, 255, 255, 255);
+}
+
+void Engine::renderGameOver() {
+    if (!renderer) return;
+    
+    // Draw semi-transparent overlay
+    SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
+    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 180);
+    SDL_Rect overlay = {0, 0, width, height};
+    SDL_RenderFillRect(renderer, &overlay);
+    
+    // Note: For text rendering, you would need SDL_ttf
+    // For now, we'll use simple rectangles to represent text/button
+    // You can enhance this later with actual text rendering
+    
+    // "Game Over" text area (represented as a rectangle for now)
+    SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
+    SDL_Rect gameOverRect = {width / 2 - 100, height / 2 - 100, 200, 50};
+    SDL_RenderFillRect(renderer, &gameOverRect);
+    
+    // "Try Again" button
+    SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
+    SDL_Rect buttonRect = {width / 2 - 75, height / 2, 150, 40};
+    SDL_RenderFillRect(renderer, &buttonRect);
+    
+    SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_NONE);
+}
+
+bool Engine::isGameOver() const {
+    if (!player) {
+        return false;
+    }
+    HealthComponent* health = player->getComponent<HealthComponent>();
+    if (!health) {
+        return false;
+    }
+    bool dead = health->isDead();
+    if (dead) {
+        std::cout << "[GAME OVER] Game Over! Player health: " << health->getHealth() << "/" << health->getMaxHealth() << std::endl;
+    }
+    return dead;
+}
+
+void Engine::resetGame() {
+    // Reload the level
+    loadLevel("assets/level.xml");
 }
 
 // Interactive controls for testing physics features

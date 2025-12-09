@@ -157,6 +157,33 @@ build CMakeFiles/demo.dir/src/CharacterComponent.cpp.obj: CXX_COMPILER__demo_uns
   OBJECT_DIR = CMakeFiles\demo.dir
   OBJECT_FILE_DIR = CMakeFiles\demo.dir\src
 
+build CMakeFiles/demo.dir/src/KeyComponent.cpp.obj: CXX_COMPILER__demo_unscanned_Debug C$:/CPSI-27703/src/KeyComponent.cpp || cmake_object_order_depends_target_demo
+  CONFIG = Debug
+  DEFINES = -DSDL_MAIN_HANDLED -DTINYXML2_DEBUG -DTINYXML2_IMPORT -D_FILE_OFFSET_BITS=64
+  DEP_FILE = CMakeFiles\demo.dir\src\KeyComponent.cpp.obj.d
+  FLAGS = -g -O0 -std=gnu++17
+  INCLUDES = -isystem C:/CPSI-27703/build/win-mingw-debug/vcpkg_installed/x64-mingw-dynamic/include -isystem C:/CPSI-27703/build/win-mingw-debug/vcpkg_installed/x64-mingw-dynamic/include/SDL2
+  OBJECT_DIR = CMakeFiles\demo.dir
+  OBJECT_FILE_DIR = CMakeFiles\demo.dir\src
+
+build CMakeFiles/demo.dir/src/DoorComponent.cpp.obj: CXX_COMPILER__demo_unscanned_Debug C$:/CPSI-27703/src/DoorComponent.cpp || cmake_object_order_depends_target_demo
+  CONFIG = Debug
+  DEFINES = -DSDL_MAIN_HANDLED -DTINYXML2_DEBUG -DTINYXML2_IMPORT -D_FILE_OFFSET_BITS=64
+  DEP_FILE = CMakeFiles\demo.dir\src\DoorComponent.cpp.obj.d
+  FLAGS = -g -O0 -std=gnu++17
+  INCLUDES = -isystem C:/CPSI-27703/build/win-mingw-debug/vcpkg_installed/x64-mingw-dynamic/include -isystem C:/CPSI-27703/build/win-mingw-debug/vcpkg_installed/x64-mingw-dynamic/include/SDL2
+  OBJECT_DIR = CMakeFiles\demo.dir
+  OBJECT_FILE_DIR = CMakeFiles\demo.dir\src
+
+build CMakeFiles/demo.dir/src/HealthComponent.cpp.obj: CXX_COMPILER__demo_unscanned_Debug C$:/CPSI-27703/src/HealthComponent.cpp || cmake_object_order_depends_target_demo
+  CONFIG = Debug
+  DEFINES = -DSDL_MAIN_HANDLED -DTINYXML2_DEBUG -DTINYXML2_IMPORT -D_FILE_OFFSET_BITS=64
+  DEP_FILE = CMakeFiles\demo.dir\src\HealthComponent.cpp.obj.d
+  FLAGS = -g -O0 -std=gnu++17
+  INCLUDES = -isystem C:/CPSI-27703/build/win-mingw-debug/vcpkg_installed/x64-mingw-dynamic/include -isystem C:/CPSI-27703/build/win-mingw-debug/vcpkg_installed/x64-mingw-dynamic/include/SDL2
+  OBJECT_DIR = CMakeFiles\demo.dir
+  OBJECT_FILE_DIR = CMakeFiles\demo.dir\src
+
 build CMakeFiles/demo.dir/src/LevelLoader.cpp.obj: CXX_COMPILER__demo_unscanned_Debug C$:/CPSI-27703/src/LevelLoader.cpp || cmake_object_order_depends_target_demo
   CONFIG = Debug
   DEFINES = -DSDL_MAIN_HANDLED -DTINYXML2_DEBUG -DTINYXML2_IMPORT -D_FILE_OFFSET_BITS=64
@@ -201,7 +228,7 @@ build CMakeFiles/demo.dir/src/Menu.cpp.obj: CXX_COMPILER__demo_unscanned_Debug C
 #############################################
 # Link the executable demo.exe
 
-build demo.exe: CXX_EXECUTABLE_LINKER__demo_Debug CMakeFiles/demo.dir/src/main.cpp.obj CMakeFiles/demo.dir/src/Object.cpp.obj CMakeFiles/demo.dir/src/Engine.cpp.obj CMakeFiles/demo.dir/src/ImageDevice.cpp.obj CMakeFiles/demo.dir/src/InputDevice.cpp.obj CMakeFiles/demo.dir/src/BodyComponent.cpp.obj CMakeFiles/demo.dir/src/SpriteComponent.cpp.obj CMakeFiles/demo.dir/src/Component.cpp.obj CMakeFiles/demo.dir/src/MissileComponent.cpp.obj CMakeFiles/demo.dir/src/BounceComponent.cpp.obj CMakeFiles/demo.dir/src/PhysicsComponent.cpp.obj CMakeFiles/demo.dir/src/CharacterComponent.cpp.obj CMakeFiles/demo.dir/src/LevelLoader.cpp.obj CMakeFiles/demo.dir/src/SaveGame.cpp.obj CMakeFiles/demo.dir/src/AnimateComponent.cpp.obj CMakeFiles/demo.dir/src/Menu.cpp.obj | vcpkg_installed/x64-mingw-dynamic/debug/lib/libSDL2_ttfd.dll.a vcpkg_installed/x64-mingw-dynamic/debug/lib/libSDL2_imaged.dll.a vcpkg_installed/x64-mingw-dynamic/debug/lib/libSDL2_mixerd.dll.a vcpkg_installed/x64-mingw-dynamic/debug/lib/libbox2dd.dll.a vcpkg_installed/x64-mingw-dynamic/debug/lib/libtinyxml2.dll.a vcpkg_installed/x64-mingw-dynamic/debug/lib/libyaml-cppd.dll.a vcpkg_installed/x64-mingw-dynamic/debug/lib/libSDL2d.dll.a
+build demo.exe: CXX_EXECUTABLE_LINKER__demo_Debug CMakeFiles/demo.dir/src/main.cpp.obj CMakeFiles/demo.dir/src/Object.cpp.obj CMakeFiles/demo.dir/src/Engine.cpp.obj CMakeFiles/demo.dir/src/ImageDevice.cpp.obj CMakeFiles/demo.dir/src/InputDevice.cpp.obj CMakeFiles/demo.dir/src/BodyComponent.cpp.obj CMakeFiles/demo.dir/src/SpriteComponent.cpp.obj CMakeFiles/demo.dir/src/Component.cpp.obj CMakeFiles/demo.dir/src/MissileComponent.cpp.obj CMakeFiles/demo.dir/src/BounceComponent.cpp.obj CMakeFiles/demo.dir/src/PhysicsComponent.cpp.obj CMakeFiles/demo.dir/src/CharacterComponent.cpp.obj CMakeFiles/demo.dir/src/KeyComponent.cpp.obj CMakeFiles/demo.dir/src/DoorComponent.cpp.obj CMakeFiles/demo.dir/src/HealthComponent.cpp.obj CMakeFiles/demo.dir/src/LevelLoader.cpp.obj CMakeFiles/demo.dir/src/SaveGame.cpp.obj CMakeFiles/demo.dir/src/AnimateComponent.cpp.obj CMakeFiles/demo.dir/src/Menu.cpp.obj | vcpkg_installed/x64-mingw-dynamic/debug/lib/libSDL2_ttfd.dll.a vcpkg_installed/x64-mingw-dynamic/debug/lib/libSDL2_imaged.dll.a vcpkg_installed/x64-mingw-dynamic/debug/lib/libSDL2_mixerd.dll.a vcpkg_installed/x64-mingw-dynamic/debug/lib/libbox2dd.dll.a vcpkg_installed/x64-mingw-dynamic/debug/lib/libtinyxml2.dll.a vcpkg_installed/x64-mingw-dynamic/debug/lib/libyaml-cppd.dll.a vcpkg_installed/x64-mingw-dynamic/debug/lib/libSDL2d.dll.a
   CONFIG = Debug
   FLAGS = -g -O0
   LINK_LIBRARIES = vcpkg_installed/x64-mingw-dynamic/debug/lib/libSDL2_ttfd.dll.a  vcpkg_installed/x64-mingw-dynamic/debug/lib/libSDL2_imaged.dll.a  vcpkg_installed/x64-mingw-dynamic/debug/lib/libSDL2_mixerd.dll.a  vcpkg_installed/x64-mingw-dynamic/debug/lib/libbox2dd.dll.a  vcpkg_installed/x64-mingw-dynamic/debug/lib/libtinyxml2.dll.a  vcpkg_installed/x64-mingw-dynamic/debug/lib/libyaml-cppd.dll.a  vcpkg_installed/x64-mingw-dynamic/debug/lib/libSDL2d.dll.a  -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32

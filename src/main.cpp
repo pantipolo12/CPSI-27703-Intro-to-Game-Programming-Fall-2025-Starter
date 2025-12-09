@@ -43,6 +43,16 @@ int main(int argc, char* argv[])
             if (event.type == SDL_QUIT) {
                 shouldQuit = true;
             }
+            // Handle try again button click if game is over
+            if (gameStarted && e.isGameOver() && event.type == SDL_MOUSEBUTTONDOWN) {
+                int mouseX = event.button.x;
+                int mouseY = event.button.y;
+                // Check if click is on "Try Again" button (center of screen)
+                if (mouseX >= e.getWidth() / 2 - 75 && mouseX <= e.getWidth() / 2 + 75 &&
+                    mouseY >= e.getHeight() / 2 && mouseY <= e.getHeight() / 2 + 40) {
+                    e.resetGame();
+                }
+            }
             InputDevice::process(event);
         }
 
@@ -132,8 +142,10 @@ int main(int argc, char* argv[])
 
                 menu.render();
             } else {
-                // Normal game update
-                e.update();
+                // Normal game update (only if not game over)
+                if (!e.isGameOver()) {
+                    e.update();
+                }
 
                 View& view = e.getView();
 
@@ -153,7 +165,31 @@ int main(int argc, char* argv[])
                     Object* obj = objPtr.get();
                     if(auto* body = obj->getComponent<BodyComponent>())
                     {
-                        SDL_Rect rect = view.transform(body->getRect());
+                        // For player, adjust collision box to match actual sprite size
+                        SDL_Rect rect;
+                        if(obj == e.getPlayer()) {
+                            float px = body->getX();
+                            float py = body->getY();
+                            float pw = body->getWidth();
+                            float ph = body->getHeight();
+                            
+                            // Reduce collision box size to match visible sprite (account for transparent padding)
+                            // The sprite is 64x64 but has ~10px of transparent padding on each side
+                            const float spritePadding = 10.0f;
+                            float visibleWidth = pw - (spritePadding * 2.0f);
+                            float visibleHeight = ph - (spritePadding * 2.0f);
+                            
+                            // Create rect with adjusted size to match visible sprite
+                            SDL_Rect worldRect = {
+                                int(px - visibleWidth / 2.0f),
+                                int(py - visibleHeight / 2.0f),
+                                int(visibleWidth),
+                                int(visibleHeight)
+                            };
+                            rect = view.transform(worldRect);
+                        } else {
+                            rect = view.transform(body->getRect());
+                        }
 
                         if(obj == e.getPlayer())
                         {
@@ -170,6 +206,13 @@ int main(int argc, char* argv[])
 
                         SDL_RenderDrawRect(renderer, &rect);
                     }
+                }
+                
+                // Render health UI and game over screen (handled in Engine::render)
+                // But we need to call it here since main.cpp has its own render loop
+                e.renderHealthUI();
+                if (e.isGameOver()) {
+                    e.renderGameOver();
                 }
             }
         }

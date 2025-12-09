@@ -64,7 +64,7 @@
 
 
     <GameObject id="playerGIGI">
-        <BodyComponent x="4500" y="200" w="64" h="64" dynamic="true" />
+        <BodyComponent x="100" y="500" w="64" h="64" dynamic="true" />
         <SpriteComponent image="playerGIGIIdle" />
         <AnimateComponent image="playerGIGIIdle" frames="6" time="0.2667" frameWidth="64" frameHeight="64" frameSpacing="10" />
         <CharacterComponent />
@@ -168,13 +168,13 @@
     </GameObject> 
 
         <GameObject id="smallGrass">
-        <BodyComponent x="4450" y="500" w="100" h="50" dynamic="false" />
+        <BodyComponent x="4400" y="500" w="100" h="50" dynamic="false" />
         <SpriteComponent image="grass" />
         <GroundComponent/> 
     </GameObject> 
 
     <GameObject id="bee">
-        <BodyComponent x="4500" y="100" w="64" h="64" dynamic="true"/>
+        <BodyComponent x="0" y="0" w="64" h="64" dynamic="true"/>
         <SpriteComponent image="bee" />
         <AnimateComponent image="bee" frames="4" time="0.2667" frameWidth="64" frameHeight="64" frameSpacing="10" />
         <MissileComponent target="playerGIGI" />
@@ -183,13 +183,41 @@
     <GameObject id="tree1">
         <SpriteComponent image="tree" />
     </GameObject>
-    </Level>
+    
+        <GameObject id="smallGrass">
+        <BodyComponent x="3250" y="300" w="100" h="50" dynamic="false" />
+        <SpriteComponent image="grass" />
+        <GroundComponent/> 
+    </GameObject> 
+
+        <GameObject id="crate">
+        <BodyComponent x="3000" y="200" w="100" h="100" dynamic="true" />
+        <SpriteComponent image="crate" />
+    </GameObject>
+
+    <GameObject id="smallGrass">
+        <BodyComponent x="3000" y="300" w="100" h="50" dynamic="false" />
+        <SpriteComponent image="grass" />
+        <GroundComponent/> 
+    </GameObject>
+
+    <GameObject id="smallGrass">
+        <BodyComponent x="2800" y="500" w="100" h="50" dynamic="false" />
+        <SpriteComponent image="grass" />
+        <GroundComponent/> 
+    </GameObject> 
 
     <GameObject id="door">
-        <SpriteComponent image="door" x="4500" y="200" w="100" h="100" />
+        <BodyComponent x="4700" y="650" w="100" h="200" dynamic="false" />
+        <!-- <SpriteComponent image="door" x="4700" y="600" w="100" h="200" /> -->
+        <SpriteComponent image="door" />
+        <DoorComponent nextLevel="assets/level1.xml" />
     </GameObject>
 
     <GameObject id="key">
-        <BodyComponent x="4450" y="600" w="50" h="50" dynamic="true"/>
+        <BodyComponent x="3250" y="0" w="50" h="50" dynamic="true"/>
         <SpriteComponent image="key" />
+        <KeyComponent />
     </GameObject>
+    </Level>
+

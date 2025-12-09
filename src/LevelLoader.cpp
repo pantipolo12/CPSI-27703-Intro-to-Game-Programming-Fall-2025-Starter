@@ -9,6 +9,9 @@
 #include "CharacterComponent.h"
 #include "GroundComponent.h"
 #include "AnimateComponent.h"
+#include "KeyComponent.h"
+#include "DoorComponent.h"
+#include "HealthComponent.h"
 
 using namespace tinyxml2;
 
@@ -106,6 +109,20 @@ bool LevelLoader::load(const std::string& filename, Engine& engine)
             else if (compName == "CharacterComponent") {
                 obj->addComponent<CharacterComponent>();
             }
+            else if (compName == "KeyComponent") {
+                obj->addComponent<KeyComponent>();
+            }
+            else if (compName == "DoorComponent") {
+                DoorComponent* door = obj->addComponent<DoorComponent>();
+                // Parse nextLevel attribute if present
+                if (comp->Attribute("nextLevel")) {
+                    door->setNextLevel(comp->Attribute("nextLevel"));
+                }
+            }
+            else if (compName == "HealthComponent") {
+                int maxHealth = comp->IntAttribute("maxHealth", 3);
+                obj->addComponent<HealthComponent>(maxHealth);
+            }
             else if (compName == "AnimateComponent") {
                 const char* image = comp->Attribute("image");
                 if (image) {
@@ -123,11 +140,26 @@ bool LevelLoader::load(const std::string& filename, Engine& engine)
 
         }
 
-        if (std::string(id) == "playerGIGI")
+        if (std::string(id) == "playerGIGI") {
             engine.setPlayer(obj);
+            // Always ensure HealthComponent exists and is reset to full health (3 health)
+            HealthComponent* existingHealth = obj->getComponent<HealthComponent>();
+            if (existingHealth) {
+                // Reset health to full (3)
+                existingHealth->reset();
+                std::cout << "[LEVEL LOADER] Reset HealthComponent for playerGIGI to " 
+                          << existingHealth->getHealth() << "/" << existingHealth->getMaxHealth() << " health" << std::endl;
+            } else {
+                // Add fresh HealthComponent with 3 health (player dies after 3 bee collisions)
+                auto* health = obj->addComponent<HealthComponent>(3);
+                std::cout << "[LEVEL LOADER] Added HealthComponent to playerGIGI with " 
+                          << health->getHealth() << "/" << health->getMaxHealth() << " health" << std::endl;
+                std::cout << "[LEVEL LOADER] Player will die after " << health->getMaxHealth() << " bee collisions" << std::endl;
+            }
+        }
     }
 
-    // Pass 2 — link components with references (like missiles)
+    // Pass 2 — link components with references 
     for (XMLElement* objElem = level->FirstChildElement("GameObject");
          objElem; objElem = objElem->NextSiblingElement("GameObject"))
     {

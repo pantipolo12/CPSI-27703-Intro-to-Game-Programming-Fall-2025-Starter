@@ -52,7 +52,7 @@ float width;
 float height; 
 float worldHeight; 
 b2ShapeId shape{}; 
-// Coordinate conversion: SDL uses Y-down, Box2D uses Y-up 
+// Coordinate conversion SDL uses Y-down, Box2D uses Y-up 
 float sdlToBox2DY(float sdlY) const { return worldHeight - sdlY; } 
 float box2DToSDLY(float box2DY) const { return worldHeight - box2DY; }
 

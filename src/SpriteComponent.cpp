@@ -110,7 +110,6 @@ void SpriteComponent::draw(SDL_RendererFlip flip) {
     // Get rotation from BodyComponent for physics-based objects (like crates)
     float rotation = 0.0f;
     if (body) {
-        // Check if this is a dynamic body that should rotate (crates, etc.)
         // Skip rotation for player (objects with CharacterComponent)
         bool isPlayer = getObject()->getComponent<CharacterComponent>() != nullptr;
         if (!isPlayer) {

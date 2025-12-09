@@ -41,6 +41,12 @@ add_executable(
     src/CharacterComponent.cpp
     src/View.h
     src/ControlerComponent.h
+    src/KeyComponent.h
+    src/KeyComponent.cpp
+    src/DoorComponent.h
+    src/DoorComponent.cpp
+    src/HealthComponent.h
+    src/HealthComponent.cpp
     src/Timer.h
     src/LevelLoader.h
     src/LevelLoader.cpp

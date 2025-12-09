@@ -19,4 +19,7 @@
     <Texture name="maskdude_hit" file="assets/Mask_Dude/Hit (32x32).png" />
     <Texture name="maskdude_jump" file="assets/Mask_Dude/Jump (32x32).png" />
     <Texture name="maskdude_fall" file="assets/Mask_Dude/Fall (32x32).png" />
+    <Texture name="door" file="assets/door.png" />
+    <Texture name="key" file="assets/key.png" />
+    <Texture name="heart" file="assets/heart.png" />
 </Assets>

@@ -1,6 +1,7 @@
 #pragma once
 #include <vector>
 #include <memory>
+#include <unordered_map>
 #include <SDL.h>
 #include <box2d/box2d.h>
 #include "Object.h"
@@ -53,6 +54,12 @@ public:
         Object* findObjectById(const std::string& id);
         void updateViewWithParallax(Object* player, float parallaxFactor);
         b2WorldId getWorldId() const { return worldId; }
+        void loadLevel(const std::string& levelPath); // Load a new level
+        void queueLevelLoad(const std::string& levelPath); // Queue a level load for next frame
+        void renderHealthUI(); // Render health hearts on screen
+        void renderGameOver(); // Render game over screen
+        bool isGameOver() const; // Check if game is over
+        void resetGame(); // Reset game state
         
         // Physics queries
         struct RaycastResult {
@@ -71,6 +78,7 @@ public:
         
         // Contact handling
         void processContactEvents();
+        void checkBeeCollisions(); // Manual collision check for bees
         
         // Runtime body management
         Object* createDynamicBody(float x, float y, float w, float h);
@@ -101,6 +109,13 @@ private:
     int lastContactBeginCount = 0;
     int lastContactEndCount = 0;
     int lastContactHitCount = 0;
+    
+    // Track which bees have recently damaged the player (to prevent multiple hits from same collision)
+    std::unordered_map<Object*, float> beeDamageCooldown; // Bee object -> time until can damage again
+    
+    // Level loading queue (to avoid crashes when loading during update)
+    std::string queuedLevelPath; // Level path to load on next frame
+    bool hasQueuedLevel = false;
     
     // Raycast visualization
     struct RaycastVisual {
